@@ -36,6 +36,7 @@
 <div class="">
 	<div id="login-page" class="row">
 		<div class="card-panel row main-center">
+
 		    <form method="POST" action="">
 		    {% csrf_token %}
 		    	<div class="row">
@@ -67,9 +68,9 @@
 		    </form>
 
 		    <div class="row center-align">
-		    	<p class="">New? <a href="#">Sign Up</a> </p>
+		    	<p class="">Don't have an accout? <a href="{% url 'register' %}">Sign Up</a> here</p>
 		    </div>
-		    <p class="row center-align">Or Sign in wih google</p>
+		    <p class="row center-align">Or Sign in with google</p>
 		    <div class="row center-align" style="margin-left: 85px">
 		    	<div class="g-signin2" data-onsuccess="onSignIn"></div>
 		    </div>
