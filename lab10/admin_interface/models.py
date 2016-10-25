@@ -8,8 +8,8 @@ class Instructor(models.Model):
 	user = models.OneToOneField(User)
 	
 	# storing whether special_admin and gmail or fb signup or normal signup
-	special_admin = models.BooleanField()
-	gmail_fb_login = models.BooleanField()
+	special_admin = models.BooleanField(default=False)
+	gmail_fb_login = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.user.username

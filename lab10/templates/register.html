@@ -37,7 +37,7 @@
 	<div id="login-page" class="row">
 		<div class="card-panel row main-center">
 
-		    <form method="POST" action="">
+		    <form method="POST" action="{% url 'register' %}">
 		    {% csrf_token %}
 		    	<div class="row">
 			        <div class="input-field col s12">
