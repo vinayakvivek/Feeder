@@ -95,9 +95,22 @@ def register(request):
 
 
 def home(request):
-	return render(request, 'home.html', {})
 
-# def google_login(request, email, id_token, name):
+	if request.user.is_authenticated:
+
+		is_special = False
+
+		if Instructor.objects.filter(user=request.user).count() > 0:
+			instrctor = Instructor.objects.get(user=request.user)
+			is_special = instrctor.special_admin
+
+		context = {
+			'is_special': is_special,
+		}
+
+		return render(request, 'home.html', context)
+
+	return redirect('login')
 
 
 

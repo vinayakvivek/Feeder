@@ -15,7 +15,7 @@
 
 	<meta name="google-signin-client_id" content="371868661146-mmvbmpesoq4rdgcmms8n415ll0l3tdit.apps.googleusercontent.com">
 
-    <style type="text/css">
+  <style type="text/css">
 	    {% block style %}
 	    {% endblock %}
 	</style>
@@ -35,6 +35,9 @@
     <!--  Scripts-->
   	<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
   	<script src="{% static 'materialize/js/materialize.js' %}"></script>
-  	
+  	<script type="text/javascript">
+     {% block script %}
+     {% endblock %} 
+    </script>
 
 </body>
