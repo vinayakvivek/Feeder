@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from admin_interface.models import Instructor
-from admin_interface.forms import UserForm
+from admin_interface.models import Instructor, Course, Student
+from admin_interface.forms import UserForm, CourseForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
@@ -102,6 +102,8 @@ def home(request):
 			instrctor = Instructor.objects.get(user=request.user)
 			is_special = instrctor.special_admin
 
+			print(Course.objects.get(code='CS207').students.all())
+
 			context = {
 				'is_special': is_special,
 			}
@@ -111,6 +113,48 @@ def home(request):
 	return redirect('login')
 
 
+def add_course(request):
+
+	error = ""
+
+	if request.method == 'POST':
+
+		course_form = CourseForm(data=request.POST)
+
+		if course_form.is_valid():
+
+			course_form.save(commit=False)
+
+			course = Course()
+			course.name = course_form.cleaned_data.get('name')
+			course.code = course_form.cleaned_data.get('code')
+			course.save()
+
+			return redirect('home')
+
+		else:
+			error = str(course_form.errors)
+			context = {
+				'form': course_form,
+				'error_msg': error,
+			}
+			return render(request, 'addcourse.html', context)
+
+	else:
+
+		if request.user.is_authenticated:
+			if Instructor.objects.filter(user=request.user).count() > 0:
+				
+				instrctor = Instructor.objects.get(user=request.user)
+				if (instrctor.special_admin):
+
+					form = CourseForm()
+					context = {
+						'form': form,
+					}
+					return render(request, 'addcourse.html', context)
+
+		return HttpResponse("You don't have access to this!")
 
 
 

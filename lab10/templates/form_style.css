@@ -1,0 +1,22 @@
+{% load static %}
+
+html, body {
+	height: 100%;
+}
+html {
+	display: table;
+	margin: auto;
+}
+body {
+	display: table-cell;
+	vertical-align: middle;
+	background:url({% static 'img/bg2.jpeg' %}) no-repeat center center fixed;
+	background-size:cover;
+}
+
+.main-center{
+	margin-top: 30px;
+	margin: 0 auto;
+	width: 330px;
+	/*background:url({% static 'img/bg1.png' %}) no-repeat center center fixed;*/
+}

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<style type="text/css">
+  {% block style %}
+	  	html, body {
+		height: 100%;
+	}
+	html {
+		display: table;
+		margin: auto;
+	}
+	body {
+		display: table-cell;
+		vertical-align: middle;
+		background-size:cover;
+	}
+
+	.main-center{
+		margin-top: 30px;
+		margin: 0 auto;
+		width: 330px;
+		/*background:url({% static 'img/bg1.png' %}) no-repeat center center fixed;*/
+	}
+  {% endblock %}
+</style>
+
+{% block navbar %}	
+{% endblock %}
+
+{% block content %}
+
+<div class="">
+	<div id="login-page" class="row">
+		<div class="card-panel row main-center">
+
+			<div class="row center-align">
+    			<p class="red-text">{{ error_msg }}</p>
+    		</div>
+
+    		{% if form %}
+		    <form method="POST" action="{% url 'addcourse' %}">
+		    {% csrf_token %}   
+		    	{% if error_msg %}	
+			   		<div class="row">
+			            <div class="col s12">
+			            	<p class="red-text">{{ errrot_msg }}</p>
+			            </div>
+			        </div>
+		        {% endif %}
+
+		    	<div class="row">
+			        <div class="input-field col s12">
+			          	{{ form.name }}
+			          	{{ form.name.label_tag }}
+			        </div>
+			    </div>		      
+		      
+			    <div class="row">
+			        <div class="input-field col s12">
+			        	{{ form.code }}
+			          	{{ form.code.label_tag }}
+			        </div>
+			    </div>
+
+			    <div class="row">
+		            <div class="input-field col s12">
+		            	<input type="submit" name="submit" value="Add course" class="btn waves-effect waves-light col s12">
+		            </div>
+		        </div>
+		    </form>
+
+		    {% endif %}
+		    
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
