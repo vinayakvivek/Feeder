@@ -50,7 +50,7 @@ def user_login(request):
 
 def user_logout(request):
 	logout(request)
-	return render(request, 'index.html', {})
+	return redirect('index')
 
 
 def register(request):
@@ -98,17 +98,15 @@ def home(request):
 
 	if request.user.is_authenticated:
 
-		is_special = False
-
 		if Instructor.objects.filter(user=request.user).count() > 0:
 			instrctor = Instructor.objects.get(user=request.user)
 			is_special = instrctor.special_admin
 
-		context = {
-			'is_special': is_special,
-		}
+			context = {
+				'is_special': is_special,
+			}
 
-		return render(request, 'home.html', context)
+			return render(request, 'home.html', context)
 
 	return redirect('login')
 
