@@ -37,8 +37,13 @@
 	<div id="login-page" class="row">
 		<div class="card-panel row main-center">
 
+			<div class="row center-align">
+    			<p class="red-text">{{ error_msg }}</p>
+    		</div>
+
 		    <form method="POST" action="">
-		    {% csrf_token %}
+		    {% csrf_token %}   	
+
 		    	<div class="row">
 			        <div class="input-field col s12">
 			          	<input id="username" type="text" class="validate" name="username">

@@ -33,61 +33,84 @@
 
 {% block content %}
 
-<div class="">
-	<div id="login-page" class="row">
-		<div class="card-panel row main-center">
+{% if not registered %}
+	<div class="">
+		<div id="login-page" class="row">
+			<div class="card-panel row main-center">
 
-		    <form method="POST" action="{% url 'register' %}">
-		    {% csrf_token %}
-		    	<div class="row">
-			        <div class="input-field col s12">
-			          	<input id="username" type="text" class="validate" name="username">
-			          	<label for="username">Username</label>
+				<div class="row center-align">
+	    			<p class="red-text">{{ error_msg }}</p>
+	    		</div>
+
+			    <form method="POST" action="{% url 'register' %}">
+			    {% csrf_token %}
+			    	<div class="row">
+				        <div class="input-field col s12">
+				          	{{ user_form.username }}
+				          	{{ user_form.username.label_tag }}
+				        </div>
+				    </div>	
+					
+					<div class="row">
+				        <div class="input-field col s12">
+				          	{{ user_form.email }}
+				         	{{ user_form.email.label_tag }}
+				        </div>
+				    </div>		      
+			      
+				    <div class="row">
+				        <div class="input-field col s12">
+				        	{{ user_form.password }}
+				         	{{ user_form.password.label_tag }}
+				        </div>
+				    </div>
+
+				    <div class="row">
+			            <div class="input-field col s12">
+			            	<input type="submit" name="submit" value="Sign Up" class="btn waves-effect waves-light col s12">
+			            </div>
 			        </div>
-			    </div>	
-				
-				<div class="row">
-			        <div class="input-field col s12">
-			          	<input id="email" type="email" class="validate" name="email">
-			          	<label for="email">Email</label>
-			        </div>
-			    </div>		      
-		      
-			    <div class="row">
-			        <div class="input-field col s12">
-			        	<input id="password" type="password" class="validate" name="password">
-			      	    <label for="password">Password</label>
-			        </div>
+			    </form>
+
+			    <div class="row center-align">
+			    	<p class="">Already have an account? <a href="{% url 'login' %}">Log in</a> here</p>
 			    </div>
-
-			    <div class="row">
-		            <div class="input-field col s12">
-		            	<input type="submit" name="submit" value="Sign Up" class="btn waves-effect waves-light col s12">
-		            </div>
-		        </div>
-		    </form>
-
-		    <div class="row center-align">
-		    	<p class="">Already have an account? <a href="{% url 'login' %}">Log in</a> here</p>
-		    </div>
-		    <p class="row center-align">Or Sign in with google</p>
-		    <div class="row center-align" style="margin-left: 85px">
-		    	<div class="g-signin2" data-onsuccess="onSignIn"></div>
-		    </div>
+			    <p class="row center-align">Or Sign in with google</p>
+			    <div class="row center-align" style="margin-left: 85px">
+			    	<div class="g-signin2" data-onsuccess="onSignIn"></div>
+			    </div>
+			</div>
 		</div>
 	</div>
-</div>
 
-<script type="text/javascript">
-	function onSignIn(googleUser) {
-	  var profile = googleUser.getBasicProfile();
-	  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-	  console.log('Name: ' + profile.getName());
-	  console.log('Image URL: ' + profile.getImageUrl());
-	  console.log('Email: ' + profile.getEmail());
+	<script type="text/javascript">
+		function onSignIn(googleUser) {
+		  var profile = googleUser.getBasicProfile();
+		  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+		  console.log('Name: ' + profile.getName());
+		  console.log('Image URL: ' + profile.getImageUrl());
+		  console.log('Email: ' + profile.getEmail());
 
-	}
-</script>
+		}
+	</script>
+
+{% else %}
+
+	<div class="row">
+		<div class="card-panel row main-center">
+
+		    <div class="row center-align">
+		    	<p class="flow-text">Logged in as <strong>{{ user }}</strong></p>
+		    </div>
+		  
+		    <div class="row center-align">
+		    	<a href="{% url 'home' %}" class="btn waves-effect waves-light blue">Home</a>
+		    </div> 
+
+		</div>
+	</div>
+
+{% endif %}
 
 {% endblock %}
 
