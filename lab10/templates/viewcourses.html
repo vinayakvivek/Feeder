@@ -17,21 +17,33 @@
 {% block content %}
 	
 	<div class="container">
-	{% for course in courses %}
-
-		<div class="container row">
-			<br>
-			<span class="flow-text left-align">{{ course.name }} - {{ course.code }}</span>
-			<a href="{% url 'course_detail' course.code %}" class="btn">Details</a>
-			<form method="POST" action="{% url 'viewcourses' %}">
-				{% csrf_token %}
-				<input type="hidden" name="course_code" value="{{ course.code }}">
-				<input type="submit" class="btn" value="Remove">
-			</form>
-			<hr>
+		<br><br>
+		<div class="collection valign">
+			{% for course in courses %}
+				<br>
+				<div class="collection-item row">
+					<div class="col s12 m6 l6">
+						<span class="flow-text">{{ course.name }} - {{ course.code }}</span>
+					</div>
+					<div class="col s6 m3 l3">
+						<a href="{% url 'course_detail' course.code %}">
+							<button class="btn-floating tooltipped green" data-position="bottom" data-delay="50" data-tooltip="Details about {{ course.code }}">
+								<i class="material-icons right">description</i>
+							</button>
+						</a>
+					</div>
+					<div class="col s6 m3 l3">
+						<form method="POST" action="{% url 'viewcourses' %}">
+							{% csrf_token %}
+							<input type="hidden" name="course_code" value="{{ course.code }}">
+							<button class="btn-floating tooltipped red" type="submit" data-position="bottom" data-delay="50" data-tooltip="Remove course {{ course.code }}">
+								<i class="material-icons right">delete</i>
+							</button>
+						</form>
+					</div>
+				</div>
+			{% endfor %}
 		</div>
-
-	{% endfor %}
 	</div>
 
 {% endblock %}

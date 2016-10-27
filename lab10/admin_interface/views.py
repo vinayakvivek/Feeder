@@ -164,7 +164,7 @@ def add_course(request):
 
 def view_courses(request):
 
-	if request.user.is_authenticated:
+	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
 
 		# true when 'remove' button is clicked
 		if request.method == 'POST':
@@ -182,6 +182,7 @@ def view_courses(request):
 	else:
 
 		return redirect('login')
+
 
 def course_detail(request, course_code):
 
@@ -213,11 +214,19 @@ def enroll(request):
 			if 'enroll' in request.POST:
 				course_code = request.POST['code']
 				course = Course.objects.get(pk=course_code)
+				# key == rollno
 				for key in request.POST:
 					if (request.POST[key] == 'on'):
 						print(key)
 						student = Student.objects.get(pk=key)
 						course.students.add(student)
+
+			elif 'dismiss' in request.POST:
+				course_code = request.POST['course_code']
+				student = request.POST['student']
+				# return HttpResponse(str(Student.objects.get(pk=student)))
+				Student.objects.get(pk=student).course_set.remove(course_code)
+				return redirect('viewcourses')
 
 			else:
 				course_code = request.POST['course_code']

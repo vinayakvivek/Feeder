@@ -35,6 +35,13 @@
     <!--  Scripts-->
   	<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
   	<script src="{% static 'materialize/js/materialize.js' %}"></script>
+
+    <script type="text/javascript">
+      // for tooltips
+      $(document).ready(function(){
+        $('.tooltipped').tooltip({delay: 50});
+      });
+    </script>
   	<script type="text/javascript">
      {% block script %}
      {% endblock %} 
