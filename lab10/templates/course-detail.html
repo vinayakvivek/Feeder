@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+<nav class="light-blue" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">{{ course_name }}</a>
+      <ul class="right">
+      	<li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+	
+	<div class="container">
+		<form method="POST" action="{% url 'enroll' %}">
+			{% csrf_token %}
+			<input type="hidden" name="course_code" value="{{ course_code }}">
+			<input type="submit" class="btn" value="Enroll students">
+		</form>
+	</div>
+
+
+	<div class="container">
+	{% for student in students %}
+
+		<div class="container row">
+			<br>
+			<span class="flow-text left-align">{{ student.name }} - {{ student.rollno }}</span>
+			<hr>
+		</div>
+
+	{% endfor %}
+	</div>
+
+{% endblock %}

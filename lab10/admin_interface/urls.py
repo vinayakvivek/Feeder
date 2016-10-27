@@ -12,4 +12,7 @@ urlpatterns = [
 	url(r'^logout/', views.user_logout, name='logout'),
 	url(r'^register/', views.register, name='register'),
 	url(r'^addcourse/', views.add_course, name='addcourse'),
+	url(r'^enroll/$', views.enroll, name='enroll'),
+	url(r'^viewcourses/', views.view_courses, name='viewcourses'),
+	url(r'^(?P<course_code>.+)/$', views.course_detail, name='course_detail'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from admin_interface.models import Instructor, Course, Student
 from admin_interface.forms import UserForm, CourseForm
@@ -28,7 +28,6 @@ def user_login(request):
 
 			if user.is_active:
 
-				print(username, password)
 				login(request, user)
 				return redirect('home')
 
@@ -102,7 +101,7 @@ def home(request):
 			instrctor = Instructor.objects.get(user=request.user)
 			is_special = instrctor.special_admin
 
-			print(Course.objects.get(code='CS207').students.all())
+			print(Student.objects.get(rollno='150050099').course_set.all())
 
 			context = {
 				'is_special': is_special,
@@ -157,11 +156,91 @@ def add_course(request):
 		return HttpResponse("You don't have access to this!")
 
 
+# def remove_course(request):
 
+# 	if request.method == 'POST':
+# 		course_code = request.POST['course_code']
+# 		Course.objects.filter(pk=course_code).delete()
 
+def view_courses(request):
 
+	if request.user.is_authenticated:
 
+		# true when 'remove' button is clicked
+		if request.method == 'POST':
+			course_code = request.POST['course_code']
+			Course.objects.filter(pk=course_code).delete()
+		
+		courses = Course.objects.all()
 
+		context = {
+			'courses': courses,
+		}
+
+		return render(request, 'viewcourses.html', context)
+				
+	else:
+
+		return redirect('login')
+
+def course_detail(request, course_code):
+
+	if request.user.is_authenticated:
+		course = get_object_or_404(Course, pk=course_code)
+
+		students = course.students.all()
+		course_name = course.name
+		# print(students)
+
+		context = {
+			'course_name': course_name,
+			'students': students,
+			'course_code': course_code,
+		}
+
+		return render(request, 'course-detail.html', context)
+
+	else:
+		return redirect('login')	
+	
+
+def enroll(request):
+
+	if request.user.is_authenticated:
+
+		if request.method == 'POST':
+
+			if 'enroll' in request.POST:
+				course_code = request.POST['code']
+				course = Course.objects.get(pk=course_code)
+				for key in request.POST:
+					if (request.POST[key] == 'on'):
+						print(key)
+						student = Student.objects.get(pk=key)
+						course.students.add(student)
+
+			else:
+				course_code = request.POST['course_code']
+
+				students_list = []
+
+				students = Student.objects.all()
+				for student in students:
+					if student.course_set.filter(code=course_code).count() == 0:
+						students_list.append(student)
+
+				context = {
+					'students': students_list,
+					'course_code': course_code,
+				}
+
+				return render(request, 'enroll.html', context)
+
+		return redirect('viewcourses')
+
+	else :
+
+		return redirect('login')
 
 
 
