@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+Permission denied
+
+<br>
+<a href="{% url 'logout' %}">Log Out</a>
+<br>
+<a href="{% url 'login' %}">Log In</a>
+
+{% endblock %} 

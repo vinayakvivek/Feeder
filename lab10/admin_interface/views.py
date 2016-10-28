@@ -109,39 +109,42 @@ def home(request):
 
 			return render(request, 'home.html', context)
 
-	return redirect('login')
+	else:
+
+		return render(request, 'permission-denied.html', {})
 
 
 def add_course(request):
 
 	error = ""
 
-	if request.method == 'POST':
+	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
 
-		course_form = CourseForm(data=request.POST)
+		if request.method == 'POST':
 
-		if course_form.is_valid():
+			course_form = CourseForm(data=request.POST)
 
-			course_form.save(commit=False)
+			if course_form.is_valid():
 
-			course = Course()
-			course.name = course_form.cleaned_data.get('name')
-			course.code = course_form.cleaned_data.get('code')
-			course.save()
+				course_form.save(commit=False)
 
-			return redirect('home')
+				course = Course()
+				course.name = course_form.cleaned_data.get('name')
+				course.code = course_form.cleaned_data.get('code')
+				course.save()
+
+				return redirect('home')
+
+			else:
+				error = str(course_form.errors)
+				context = {
+					'form': course_form,
+					'error_msg': error,
+				}
+				return render(request, 'addcourse.html', context)
 
 		else:
-			error = str(course_form.errors)
-			context = {
-				'form': course_form,
-				'error_msg': error,
-			}
-			return render(request, 'addcourse.html', context)
 
-	else:
-
-		if request.user.is_authenticated:
 			if Instructor.objects.filter(user=request.user).count() > 0:
 				
 				instrctor = Instructor.objects.get(user=request.user)
@@ -153,14 +156,11 @@ def add_course(request):
 					}
 					return render(request, 'addcourse.html', context)
 
-		return HttpResponse("You don't have access to this!")
+	else:
+		
+		return render(request, 'permission-denied.html', {})
 
 
-# def remove_course(request):
-
-# 	if request.method == 'POST':
-# 		course_code = request.POST['course_code']
-# 		Course.objects.filter(pk=course_code).delete()
 
 def view_courses(request):
 
@@ -181,12 +181,13 @@ def view_courses(request):
 				
 	else:
 
-		return redirect('login')
+		return render(request, 'permission-denied.html', {})
+
 
 
 def course_detail(request, course_code):
 
-	if request.user.is_authenticated:
+	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
 		course = get_object_or_404(Course, pk=course_code)
 
 		students = course.students.all()
@@ -202,12 +203,13 @@ def course_detail(request, course_code):
 		return render(request, 'course-detail.html', context)
 
 	else:
-		return redirect('login')	
+		return render(request, 'permission-denied.html', {})	
 	
+
 
 def enroll(request):
 
-	if request.user.is_authenticated:
+	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
 
 		if request.method == 'POST':
 
@@ -248,8 +250,7 @@ def enroll(request):
 		return redirect('viewcourses')
 
 	else :
-
-		return redirect('login')
+		return render(request, 'permission-denied.html', {})
 
 
 
