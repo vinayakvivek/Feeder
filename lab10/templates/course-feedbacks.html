@@ -1,9 +1,36 @@
-{% for feedback in feedbacks %}
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+<nav class="light-blue" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Feedbacks</a>
+      <ul class="right">
+      	<li><a href="{% url 'home' %}" class="flow-text">Home</a></li>
+        <li><a href="{% url 'logout' %}" class="flow-text">Logout</a></li>
+      </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
 	
-	<div class="">
-
-		<p>{{ feedback.title }}</p>
-
+	<div class="container">
+		<div class="row center-align">
+			<br>
+			<h4>SELECT A FEEDBACK</h4>
+		</div>
+		<div class="collection valign">
+			{% for feedback in feedbacks %}
+				<br>
+				<div class="collection-item row">
+					<div class="col s12 m6 l6">
+						<span class="flow-text"><a href="{% url 'feedbackdetail' feedback.id %}">{{ feedback.title }}</a></span>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 	</div>
 
-{% endfor %}
+{% endblock %}

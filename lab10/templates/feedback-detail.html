@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+
+{% block navbar %}
+<nav class="light-blue" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Feedback</a>
+      <ul class="right">
+      	<li><a href="{% url 'home' %}" class="flow-text">Home</a></li>
+        <li><a href="{% url 'logout' %}" class="flow-text">Logout</a></li>
+      </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+	<div class="container">
+		<div class="row">
+			<h3 class="flow-text">{{ feedback.title }}</h3>
+		</div>
+		<div class="row">
+			<h6>Description : {{ feedback.description }}</h6>
+		</div>
+	</div>	
+
+	<hr>
+	
+	{% for q in feedback.questions.all %}
+
+		<div class="container">
+
+			<br><br>
+			<div class="row center-align">
+				<p>Question {{ forloop.counter }} - {{ q.question }}</p>
+			</div>
+
+			<div id="chart{{ q.id }}" class="container"></div>
+
+			<script type="text/javascript">
+				c3.generate({
+				    bindto: "#chart{{ q.id }}",
+				    data: {
+				        x : 'x',
+				        columns: [
+				            ['x', '{{ q.a }}', '{{ q.b }}', '{{ q.c }}', '{{ q.d }}', '{{ q.e }}'],
+				            ['label',
+				             {{ q.objectiveanswer.count_a }},
+				             {{ q.objectiveanswer.count_b }},
+				             {{ q.objectiveanswer.count_c }},
+				             {{ q.objectiveanswer.count_d }},
+				             {{ q.objectiveanswer.count_e }}],
+				        ],
+				        type: 'bar'
+				    },
+				    axis: {
+				        x: {
+				            type: 'categorized' // this is needed to load string x value
+				        }
+				    },
+				});
+			</script>
+
+		</div>
+
+		<hr>
+
+	{% endfor %}
+
+{% endblock %}

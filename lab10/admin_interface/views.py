@@ -370,7 +370,29 @@ def coursefeedbacks(request, course_code):
 
 
 
+def mark_answer(request, rollno, password, question_id, answer):
+	print(rollno, password)
+	return HttpResponse("You marked " + str(answer) + ", for question " + str(question_id))
 
+
+def feedback_details(request, feedback_id):
+
+	if request.user.is_authenticated:
+
+		feedback = Feedback.objects.get(pk=feedback_id)
+		questions = feedback.questions
+		answers = []
+		# for q in questions:
+		# 	if (hasattr(q, 'objectiveanswer'))
+
+		context = {
+			'feedback': feedback,
+		}
+		return render(request, 'feedback-detail.html', context)
+
+	else:
+		return redirect('login')
+	
 
 
 

@@ -4,11 +4,30 @@
 {% endblock %}
 
 {% block content %}
-Permission denied
 
-<br>
-<a href="{% url 'logout' %}">Log Out</a>
-<br>
-<a href="{% url 'login' %}">Log In</a>
+	<div class="container">
+
+		<div class="row center-align">
+			<p class="flow-text red">Permission denied!!</p>
+		</div>
+
+		{% if not request.user.is_anonymous %}
+		<div class="row">
+			<p class="flow-text">Logged in as {{ user }}</p>
+		</div>
+
+		<div class="row">
+			<a href="{% url 'logout' %}" class="btn">Log Out</a>
+		</div>
+
+		<div class="row">
+			<a href="{% url 'login' %}" class="btn">Log In as someone else</a>
+		</div>
+		{% else %}
+		<div class="row">
+			<a href="{% url 'login' %}" class="btn">Log In</a>
+		</div>
+		{% endif %}
+	</div>
 
 {% endblock %} 

@@ -20,10 +20,10 @@ class Instructor(models.Model):
 class Student(models.Model):
 	name = models.CharField(max_length=100)
 	rollno = models.CharField(max_length=15, primary_key=True)
+	# password = models.CharField(max_length=50)
 
 	def __str__(self):
 		return self.name
-
 
 # model for courses
 class Course(models.Model):
@@ -44,9 +44,7 @@ class Question(models.Model):
 	c = models.CharField(max_length=100)
 	d = models.CharField(max_length=100)
 	e = models.CharField(max_length=100)
-	# answer
-	answer = models.IntegerField(null=True)
-
+	
 	def __str__(self):
 		return self.question
 
@@ -56,12 +54,25 @@ class Question(models.Model):
 			raise ValidationError('Question cannot be blank')
 
 
+class Objectiveanswer(models.Model):
+	question = models.OneToOneField(Question)
+	count_a = models.IntegerField(default=0)
+	count_b = models.IntegerField(default=0)
+	count_c = models.IntegerField(default=0)
+	count_d = models.IntegerField(default=0)
+	count_e = models.IntegerField(default=0)
+
+	def __str__(self):
+		return ("answer to " + str(self.question))
+
+
 class Feedback(models.Model):
 	course = models.ForeignKey(Course, on_delete=models.CASCADE)
 	id = models.AutoField(primary_key=True)
 	description = models.CharField(max_length=200)
 	title = models.CharField(max_length=100)
-	questions = models.ManyToManyField(Question)	
+	questions = models.ManyToManyField(Question)
+	students = models.ManyToManyField(Student)
 
 	def __str__(self):
 		return self.title
