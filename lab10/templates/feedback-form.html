@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
-
+{% load static %}
 <style type="text/css">
     {% block style %}
-    	.add-row {
-
-    	}
+    	body {
+			/*background:url({% static 'img/bg5.jpeg' %}) no-repeat center center fixed;*/
+			background-color: white;
+			background-size:cover;
+		}
     {% endblock %}
 </style>
 
@@ -19,7 +21,7 @@
 		<p class="flow-text center-align">New feedback for {{ course_code }}</p>
 	</div>
 
-	<form method="POST" action="">
+	<form method="POST" action="{% url 'newfeedback' course_code %}">
 		{% csrf_token %}
 
 		<div class="row">
@@ -43,11 +45,19 @@
 			</div>
 		</div>
 
+		<div class="row center-align">
 		<div id="questions" class="container">
 
-		{{ qformset.management_form }}
+			{{ qformset.management_form }}
 
 			{% for qform in qformset %}
+
+				{% if qform.errors %}
+					<div class="row">
+						<p class="red">{{ qform.errors }}</p>
+					</div>
+				{% endif %}
+
 				<div class="qformset">
 					<br><br>
 					<div class="row">
@@ -90,22 +100,23 @@
 
 			{% endfor %}
 		</div>
-		<button type="submit" name="submit">Submit</button>
+		</div>
+		<br><br>
+		<div class="row center-align">
+			<button class="btn blue" type="submit" name="submit">Submit</button>
+		</div>
 	</form>
 
+	<br><br><br><br><br>
 </div>
 {% endblock %}
 
 <script type="text/javascript">
 {% block script %}
-	// $(document).ready(function() {
-	// 	$('.add-row').addClass('btn');
-	// 	$('.delete-row').addClass('btn red small');
-	// });
-
+	
 	$('.qformset').formset({
-        addText: 'add question',
-        deleteText: 'remove'
+        deleteText: '<button class="btn-floating red tooltipped" data-position="bottom" data-tooltip="Delete the question above"><i class="material-icons right">delete</i></button><br><br>',
+        addText: '<button class="btn-floating green tooltipped" data-position="bottom" data-tooltip="Add a new question"><i class="material-icons right">add</i></button>'
     });
 
 {% endblock %}

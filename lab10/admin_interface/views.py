@@ -9,7 +9,17 @@ from django.forms.formsets import formset_factory
 
 
 def index(request):
-	return render(request, 'index.html', {})
+
+	authenticated = False
+
+	if request.user.is_authenticated:
+		authenticated = True
+
+	context = {
+		'authenticated': authenticated,
+	}
+
+	return render(request, 'index.html', context)
 
 
 def user_login(request):
@@ -108,9 +118,7 @@ def home(request):
 
 			return render(request, 'home.html', context)
 
-	else:
-
-		return render(request, 'permission-denied.html', {})
+	return render(request, 'permission-denied.html', {})
 
 
 '''
@@ -259,22 +267,18 @@ def addfeedback(request):
 
 	if request.user.is_authenticated:
 		
-		if request.method == 'POST' and 'course_code' in request.POST:
-
-			course_code = request.POST['course_code']
-
-		else:
-			courses = Course.objects.all()
-			context = {
-				'courses': courses,
-			}
-			return render(request, 'addfeedback.html', context)
+		courses = Course.objects.all()
+		context = {
+			'courses': courses,
+		}
+		return render(request, 'addfeedback.html', context)
 
 	else:
 		return redirect('login')
 
 
-def feedback(request, course_code):
+# TODO : error checking
+def newfeedback(request, course_code):
 
 	if request.user.is_authenticated:
 
@@ -289,7 +293,10 @@ def feedback(request, course_code):
 
 				title = feedback_form.cleaned_data.get('title')
 				description = feedback_form.cleaned_data.get('description')
-				new_feedback = Feedback(title=title, description=description)
+				new_feedback = Feedback(
+							title=title,
+							description=description,
+							course=Course.objects.get(pk=course_code))
 				new_feedback.save()
 
 				for qform in question_formset:
@@ -300,19 +307,25 @@ def feedback(request, course_code):
 					d = qform.cleaned_data.get('d')
 					e = qform.cleaned_data.get('e')
 
-					new_question = Question(question=question, a=a, b=b, c=c, d=d, e=e)
-					new_question.save()
-
-					new_feedback.questions.add(new_question)
+					if question:
+						new_question = Question(question=question, a=a, b=b, c=c, d=d, e=e)
+						new_question.save()
+						new_feedback.questions.add(new_question)
+					else:
+						errors = "Blank question"
 
 			else:
 				# TODO
-				return HttpResponse("errors in form")
+				context = {
+					'form': feedback_form,
+					'qformset': question_formset,
+					'course_code': course_code,
+				}
+				return render(request, 'feedback-form.html', context)
 
 
 		else:
 			form = FeedbackForm()
-			# qform = QuestionForm()
 			qformset = QFormSet()
 			context = {
 				'form': form,
@@ -321,16 +334,39 @@ def feedback(request, course_code):
 			}
 			return render(request, 'feedback-form.html', context)
 
-		return HttpResponse("New feedback in " + str(course_code))
+		return redirect('home')
 	else:
 		return redirect('login')
 
 
 
+def viewfeedback(request):
+
+	if request.user.is_authenticated:
+
+		courses = Course.objects.all()
+		context = {
+			'courses': courses,
+		}
+		return render(request, 'viewfeedback.html', context)
+
+	else:
+		return redirect('login')
 
 
+def coursefeedbacks(request, course_code):
 
+	if request.user.is_authenticated:
 
+		feedbacks = Course.objects.get(pk=course_code).feedback_set.all()
+
+		context = {
+			'feedbacks': feedbacks,
+		}
+		return render(request, 'course-feedbacks.html', context)
+
+	else:
+		return redirect('login')
 
 
 

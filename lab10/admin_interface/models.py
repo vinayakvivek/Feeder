@@ -36,7 +36,7 @@ class Course(models.Model):
 
 
 class Question(models.Model):
-	question = models.CharField(max_length=500, blank=False)
+	question = models.CharField(max_length=500)
 	id = models.AutoField(primary_key=True)
 	# 5 choices for each question (a-1, e-5)
 	a = models.CharField(max_length=100)
@@ -50,12 +50,17 @@ class Question(models.Model):
 	def __str__(self):
 		return self.question
 
+	def clean(self):
+		from django.core.exceptions import ValidationError
+		if not self.question:
+			raise ValidationError('Question cannot be blank')
+
 
 class Feedback(models.Model):
-	# course = models.CharField(max_length=100, required=True)
+	course = models.ForeignKey(Course, on_delete=models.CASCADE)
 	id = models.AutoField(primary_key=True)
 	description = models.CharField(max_length=200)
-	title = models.CharField(max_length=100, blank=False)
+	title = models.CharField(max_length=100)
 	questions = models.ManyToManyField(Question)	
 
 	def __str__(self):

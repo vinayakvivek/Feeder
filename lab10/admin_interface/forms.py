@@ -38,3 +38,9 @@ class QuestionForm(forms.ModelForm):
 			'e': forms.TextInput(attrs={'placeholder': 'Option 5'}),
 		}
 
+	def clean_question(self):
+		q = self.cleaned_data.get('question')
+		if q == "":
+			raise forms.ValidationError("Please dont leave any questions blank")
+
+		return q

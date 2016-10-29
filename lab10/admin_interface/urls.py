@@ -15,7 +15,9 @@ urlpatterns = [
 	url(r'^enroll/$', views.enroll, name='enroll'),
 	url(r'^viewcourses/', views.view_courses, name='viewcourses'),
 	url(r'^addfeedback/$', views.addfeedback, name='addfeedback'),
-	url(r'^(?P<course_code>.+)/newfeedback/$', views.feedback, name='newfeedback'),
+	url(r'^viewfeedback/$', views.viewfeedback, name='viewfeedback'),
+	url(r'^(?P<course_code>.+)/feedbacks/$', views.coursefeedbacks, name='feedbacks'),
+	url(r'^(?P<course_code>.+)/newfeedback/$', views.newfeedback, name='newfeedback'),
 	url(r'^(?P<course_code>.+)/$', views.course_detail, name='course_detail'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -5,18 +5,38 @@
 <style type="text/css">
   {% block style %}
   	html, body {
-  		height: 100%;
-  	}
-  	
+		height: 100%;
+	}
+
+	.light {
+		opacity: 0.5;
+	}
+
+	body {
+		background:url({% static 'img/bg4.jpeg' %}) no-repeat center center fixed;
+		background-size:cover;
+	}
   {% endblock %}
 </style>
 
 {% block navbar %}	
+	<nav class="light-blue lighten-3 light" role="navigation">
+	    <div class="nav-wrapper container">
+	      	<a id="logo-container" href="{% url 'home' %}" class="brand-logo"><span class="black-text">Feed'er</span></a>
+	      	<ul class="right">
+	      		{% if authenticated is True %}
+	        		<li><a href="{% url 'home' %}" class="black-text flow-text">Home</a></li>
+	        		<li><a href="{% url 'logout' %}" class="black-text flow-text">Logout</a></li>
+	        	{% else %}
+	        		<li><a href="{% url 'login' %}" class="black-text flow-text">Log In</a></li>
+	        		<li><a href="{% url 'register' %}" class="black-text flow-text">Sign Up</a></li>
+	       	 	{% endif %}
+	      	</ul>
+	    </div>
+	</nav>
 {% endblock %}
 
 {% block content %}
-	<p><a href="{% url 'login' %}">Log In</a></p>
-	<p><a href="{% url 'register' %}">Sign Up</a></p>	
 {% endblock %}
 
 
