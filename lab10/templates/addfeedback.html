@@ -1,0 +1,5 @@
+{% for course in courses %}
+	
+	<p><a href="{% url 'newfeedback' course.code %}">{{ course.code }}</a></p>
+
+{% endfor %}

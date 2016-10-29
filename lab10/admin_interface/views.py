@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from admin_interface.models import Instructor, Course, Student
-from admin_interface.forms import UserForm, CourseForm
+from admin_interface.models import Instructor, Course, Student, Feedback, Question
+from admin_interface.forms import UserForm, CourseForm, FeedbackForm, QuestionForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
+from django.forms.formsets import formset_factory
 
 
 def index(request):
@@ -21,8 +22,6 @@ def user_login(request):
 		password = request.POST.get('password')
 
 		user = authenticate(username=username, password=password)
-
-		# print(username, password)
 
 		if user:
 
@@ -114,6 +113,9 @@ def home(request):
 		return render(request, 'permission-denied.html', {})
 
 
+'''
+	view functions for special admin
+'''
 def add_course(request):
 
 	error = ""
@@ -161,7 +163,6 @@ def add_course(request):
 		return render(request, 'permission-denied.html', {})
 
 
-
 def view_courses(request):
 
 	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
@@ -184,7 +185,6 @@ def view_courses(request):
 		return render(request, 'permission-denied.html', {})
 
 
-
 def course_detail(request, course_code):
 
 	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
@@ -205,7 +205,6 @@ def course_detail(request, course_code):
 	else:
 		return render(request, 'permission-denied.html', {})	
 	
-
 
 def enroll(request):
 
@@ -253,7 +252,78 @@ def enroll(request):
 		return render(request, 'permission-denied.html', {})
 
 
+'''
+	view functions for any instructor
+'''
+def addfeedback(request):
 
+	if request.user.is_authenticated:
+		
+		if request.method == 'POST' and 'course_code' in request.POST:
+
+			course_code = request.POST['course_code']
+
+		else:
+			courses = Course.objects.all()
+			context = {
+				'courses': courses,
+			}
+			return render(request, 'addfeedback.html', context)
+
+	else:
+		return redirect('login')
+
+
+def feedback(request, course_code):
+
+	if request.user.is_authenticated:
+
+		QFormSet = formset_factory(QuestionForm)
+
+		if request.method == 'POST':
+			
+			feedback_form = FeedbackForm(request.POST)
+			question_formset = QFormSet(request.POST)
+
+			if feedback_form.is_valid() and question_formset.is_valid():
+
+				title = feedback_form.cleaned_data.get('title')
+				description = feedback_form.cleaned_data.get('description')
+				new_feedback = Feedback(title=title, description=description)
+				new_feedback.save()
+
+				for qform in question_formset:
+					question = qform.cleaned_data.get('question')
+					a = qform.cleaned_data.get('a')
+					b = qform.cleaned_data.get('b')
+					c = qform.cleaned_data.get('c')
+					d = qform.cleaned_data.get('d')
+					e = qform.cleaned_data.get('e')
+
+					new_question = Question(question=question, a=a, b=b, c=c, d=d, e=e)
+					new_question.save()
+
+					new_feedback.questions.add(new_question)
+
+			else:
+				# TODO
+				return HttpResponse("errors in form")
+
+
+		else:
+			form = FeedbackForm()
+			# qform = QuestionForm()
+			qformset = QFormSet()
+			context = {
+				'form': form,
+				'qformset': qformset,
+				'course_code': course_code,
+			}
+			return render(request, 'feedback-form.html', context)
+
+		return HttpResponse("New feedback in " + str(course_code))
+	else:
+		return redirect('login')
 
 
 
