@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from admin_interface.models import Instructor, Course, Student, Feedback, Question
-from admin_interface.forms import UserForm, CourseForm, FeedbackForm, QuestionForm
+from admin_interface.models import Instructor, Course, Student, Feedback, Question, Deadline
+from admin_interface.forms import UserForm, CourseForm, FeedbackForm, QuestionForm, DeadlineForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.forms.formsets import formset_factory
+from django.conf import settings
 
 
 def index(request):
@@ -393,6 +394,78 @@ def feedback_details(request, feedback_id):
 	else:
 		return redirect('login')
 	
+
+def add_deadline(request):
+
+	if request.user.is_authenticated:
+
+		courses = Course.objects.all()
+		context = {
+			'courses': courses,
+		}
+		return render(request, 'add-deadline.html', context)
+
+	return redirect('login')
+
+
+def newdeadline(request, course_code):
+
+	if request.user.is_authenticated:
+
+		deadline_form = DeadlineForm()
+
+		if request.method == 'POST':
+
+			deadline_form = DeadlineForm(request.POST)
+
+			if deadline_form.is_valid():
+				assignment = deadline_form.cleaned_data.get('assignment')
+				submission_date = deadline_form.cleaned_data.get('submission_date')
+				submission_time = deadline_form.cleaned_data.get('submission_time')
+				
+				new_deadline = Deadline(
+					course=Course.objects.get(pk=course_code),
+					assignment=assignment,
+					submission_time=submission_time,
+					submission_date=submission_date)
+				new_deadline.save()
+
+				return redirect('home')
+		
+		context = {
+			'form': deadline_form,
+			'course_code': course_code,
+		}
+		return render(request, 'deadline-form.html', context)
+
+	else:
+		return redirect('login')
+
+
+def viewdeadlines(request):
+
+	if request.user.is_authenticated:
+
+		deadlines = Deadline.objects.all().order_by('submission_date')
+		context = {
+			'deadlines': deadlines,
+		}
+		return render(request, 'viewdeadlines.html', context)
+
+	else:
+		return redirect('login')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

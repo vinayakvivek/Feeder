@@ -2,7 +2,9 @@ from django import forms
 from django.forms import Textarea
 from django.forms.formsets import BaseFormSet
 from django.contrib.auth.models import User
-from admin_interface.models import Instructor, Course, Question, Feedback
+from admin_interface.models import Instructor, Course, Question, Feedback, Deadline
+from django.conf import settings
+from django.utils import timezone
 
 class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
@@ -44,3 +46,27 @@ class QuestionForm(forms.ModelForm):
 			raise forms.ValidationError("Please dont leave any questions blank")
 
 		return q
+
+
+class DeadlineForm(forms.ModelForm):
+	submission_date = forms.DateField(input_formats=['%d %B, %Y'],
+									  widget=forms.DateInput(attrs={'class': 'datepicker'}))
+	class Meta:
+		model = Deadline
+		fields = ('assignment', 'submission_date', 'submission_time')
+		widgets = {
+			'submission_time': forms.TimeInput(format='%H:%M'),
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+

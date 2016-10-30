@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+<style type="text/css">
+{% block style %}
+	td, th {
+    	text-align:center; 
+    	vertical-align:middle;
+	}	
+{% endblock %}
+</style>
+
+{% block navbar %}
+	<nav class="grey" role="navigation">
+	    <div class="nav-wrapper container">
+	      <a id="logo-container" href="{% url 'home' %}" class="brand-logo">Deadlines</a>
+	      <ul class="right">
+	        <li><a href="{% url 'home' %}" class="flow-text">Home</a></li>
+	        <li><a href="{% url 'logout' %}" class="flow-text">Logout</a></li>
+	      </ul>
+	    </div>
+	</nav>
+{% endblock %}
+
+{% block content %}
+	<br><br>
+	<div class="container">
+		<table class="highlight">
+	        <thead>
+		        <tr>
+		            <th>Course</th>
+		            <th>Assignment</th>
+		            <th>Submission Date</th>
+		            <th>Submission Time</th>
+		        </tr>
+	        </thead>
+
+	        <tbody>
+	        	{% for deadline in deadlines %}
+	            <tr>
+		            <td>{{ deadline.course }}</td>
+		            <td>{{ deadline.assignment }}</td>
+		            <td>{{ deadline.submission_date }}</td>
+		            <td>{{ deadline.submission_time }}</td>
+
+	            </tr>
+	            {% endfor %}
+	        </tbody>
+	    </table>
+
+{% endblock %}

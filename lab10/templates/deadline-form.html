@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<style type="text/css">
+	{% block style %}
+	  	html, body {
+		height: 100%;
+	}
+  {% endblock %}
+</style>
+
+{% block navbar %}	
+{% endblock %}
+
+{% block content %}
+
+<br><br>
+
+<div class="container">
+	<div class="card-panel">
+	
+    		{% if form %}
+		    <form method="POST" action="{% url 'newdeadline' course_code %}">
+		    {% csrf_token %}   
+
+				<div class="row">
+			        <div class="input-field col s12">
+			          	<p class="flow-text">New deadline in {{ course_code }}</p>
+			        </div>
+			    </div>
+
+		    	<div class="row">
+			        <div class="input-field col s12">
+			          	{{ form.assignment }}
+			          	{{ form.assignment.label_tag }}
+			        </div>
+			    </div>		      
+		      
+			    <div class="row">
+			        <div class="input-field col s12">
+			        	{{ form.submission_date }}
+			          	{{ form.submission_date.label_tag }}
+			        </div>
+			    </div>
+
+			    <div class="row">
+			        <div class="input-field col s12">
+			        	{{ form.submission_time }}
+			          	{{ form.submission_time.label_tag }}
+			          	<div class="red-text">{{ form.submission_time.errors }}</div>
+			        </div>
+			    </div>
+
+			    <div class="row">
+		            <div class="input-field col s6 m3">
+		            	<input type="submit" name="submit" value="Create deadline" class="btn waves-effect waves-light col s12">
+		            </div>
+		        </div>
+		    </form>
+
+		    {% endif %}
+
+			<div class="row center-align">
+	            <a href="{% url 'home' %}" class="btn">back to home</a>
+	        </div>		    
+		    
+	</div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

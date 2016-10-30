@@ -78,9 +78,15 @@ class Feedback(models.Model):
 		return self.title
 
 
+class Deadline(models.Model):
+	course = models.ForeignKey(Course, on_delete=models.CASCADE)
+	id = models.AutoField(primary_key=True)
+	assignment = models.CharField(max_length=100)
+	submission_date = models.DateField()
+	submission_time = models.TimeField()
 
-
-
+	def __str__(self):
+		return self.assignment
 
 
 
