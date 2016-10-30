@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<style type="text/css">
+  {% block style %}
+  	{% include 'form_style.css' %}
+  {% endblock %}
+</style>
+
+{% block navbar %}	
+{% endblock %}
+
+{% block content %}
+
+	    <div class="row center-align">
+	    	<p>Go to <a href="{% url 'home' %}">Home</a></p>
+	    </div>
+  
+
+    <p class="row center-align">Or Sign in with google</p>
+    <div class="row center-align" style="margin-left: 85px">
+    	<div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+
+{% endblock %}
+
+<script type="text/javascript">
+{% block script %}
+		function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = jQuery.trim(cookies[i]);
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getCookie('csrftoken');
+
+		function csrfSafeMethod(method) {
+		    // these HTTP methods do not require CSRF protection
+		    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+		}
+		$.ajaxSetup({
+		    beforeSend: function(xhr, settings) {
+		        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		        }
+		    }
+		});
+
+		function onSignIn(googleUser) {
+		    var profile = googleUser.getBasicProfile();
+		    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+		    console.log('Name: ' + profile.getName());
+		    console.log('Image URL: ' + profile.getImageUrl());
+		    console.log('Email: ' + profile.getEmail());
+
+		    var id_token = googleUser.getAuthResponse().id_token; 
+
+			$.ajax({
+		        url : "{% url 'googlelogin' %}", // the endpoint
+		        type : "POST", // http method
+		        data : { 'ID' : profile.getId(),
+		        		 'name': profile.getName(),
+		        		 'email': profile.getEmail()}, // data sent with the post request
+
+		        // handle a successful response
+		        success : function(json) {
+		            // $('#post-text').val(''); // remove the value from the input
+		            console.log(json); // log the returned json to the console
+		            console.log("success"); // another sanity check
+		        },
+
+		        // handle a non-successful response
+		        error : function(xhr,errmsg,err) {
+		            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+		                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+		            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+		        }
+		    });
+		    
+		}
+
+{% endblock %}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

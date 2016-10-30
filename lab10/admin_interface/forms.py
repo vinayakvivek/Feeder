@@ -14,6 +14,12 @@ class UserForm(forms.ModelForm):
 		fields = ('username', 'email', 'password')
 
 class CourseForm(forms.ModelForm):
+	midsem_date = forms.DateField(input_formats=['%d %B, %Y'],
+									  widget=forms.DateInput(attrs={'class': 'datepicker'}))
+	endsem_date = forms.DateField(input_formats=['%d %B, %Y'],
+									  widget=forms.DateInput(attrs={'class': 'datepicker'}))
+	midsem_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'))
+	endsem_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'))
 	class Meta:
 		model = Course
 		fields = ('name', 'code')

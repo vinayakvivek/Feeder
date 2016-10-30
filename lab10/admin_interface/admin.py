@@ -2,7 +2,7 @@ from django.contrib import admin
 from admin_interface.models import Instructor, Student, Course, Feedback, Question, Objectiveanswer, Deadline
 
 class InstructorAdmin(admin.ModelAdmin):
-	list_display = ['user', 'special_admin', 'google_fb_login']
+	list_display = ['user', 'special_admin', 'google_login']
 
 class StudentAdmin(admin.ModelAdmin):
 	list_display = ['name', 'rollno'];

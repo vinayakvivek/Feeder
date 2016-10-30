@@ -8,9 +8,10 @@ class Instructor(models.Model):
 	# user.username is just the email address but user.email is left blank
 	user = models.OneToOneField(User)
 	
+	email = models.EmailField(primary_key=True)
 	# storing whether special_admin and google or fb signup or normal signup
 	special_admin = models.BooleanField(default=False)
-	google_fb_login = models.BooleanField(default=False)
+	google_login = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.user.username

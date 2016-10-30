@@ -9,7 +9,18 @@ from django.forms.formsets import formset_factory
 from django.conf import settings
 
 
+def populateStudents():
+	f = open('admin_interface/student_list', 'r')
+	for line in f:
+		line = line.rstrip('\n').split(',')
+		# print(line[0], line[1])
+		if (Student.objects.filter(rollno=line[0]).count() == 0):
+			new_student = Student(rollno=line[0], name=line[1])
+			new_student.save()
+
 def index(request):
+
+	populateStudents()
 
 	authenticated = False
 
@@ -22,6 +33,59 @@ def index(request):
 
 	return render(request, 'index.html', context)
 
+
+def google_login(request):
+
+	logged_in = False
+
+	if request.method == 'POST' and 'ID' in request.POST:
+		email = request.POST['email']
+		name = request.POST['name'].split(' ')[0]
+		id = request.POST['ID']
+
+		print(name)
+		
+		if Instructor.objects.filter(email=email).count() > 0:
+			instructor = Instructor.objects.get(email=email)
+			if instructor.google_login == True:
+				user = authenticate(username=email, password=id)
+				if user:
+					if user.is_active:
+						login(request, user)
+						logged_in = True
+					else:
+						error = "Your account is disabled"
+				else:
+					error = "Invalid credentials"
+		
+		else:
+			print('new user')
+
+			user = User()
+			user.username = email
+			user.email = email
+			user.set_password(id)
+			user.save()
+
+			new_instructor = Instructor(
+				user=user,
+				email=email,
+				google_login=True)
+			new_instructor.save()
+
+			user = authenticate(username=email, password=id)
+			if user:
+				if user.is_active:
+					login(request, user)
+					logged_in = True
+				else:
+					error = "Your account is disabled"
+			else:
+				error = "Invalid credentials"
+
+	print(logged_in)
+
+	return render(request, 'google-login.html', {'logged_in': logged_in})
 
 def user_login(request):
 
@@ -70,6 +134,7 @@ def register(request):
 	registered = False
 	error = ""
 
+
 	if request.method == 'POST':
 
 		user_form = UserForm(data=request.POST)
@@ -83,6 +148,7 @@ def register(request):
 
 			profile = Instructor()
 			profile.user = user
+			profile.email = user.email
 			profile.save()
 
 			registered = True
@@ -111,8 +177,6 @@ def home(request):
 			instrctor = Instructor.objects.get(user=request.user)
 			is_special = instrctor.special_admin
 
-			print(Student.objects.get(rollno='150050099').course_set.all())
-
 			context = {
 				'is_special': is_special,
 			}
@@ -125,6 +189,81 @@ def home(request):
 '''
 	view functions for special admin
 '''
+def createFeedbacks(course_code):
+	course = Course.objects.get(pk=course_code)
+	# Midsem feedback
+	question1 = Question(
+		question="This course as a whole so far has been",
+		a='Poor',
+		b='Fair',
+		c='Good',
+		d='Very Good',
+		e='Excellent')
+	question1.save()
+
+	question2 = Question(
+		question="Feedback on course content",
+		a='Difficult',
+		b='Well-designed',
+		c='Poorly graded',
+		d='Learning experience',
+		e='Just right')
+	question2.save()
+
+	midsem_feedback = Feedback(
+		course=course,
+		title="Mid-semester Feedback",
+		description="")
+	midsem_feedback.save()
+	midsem_feedback.questions.add(question1)
+	midsem_feedback.questions.add(question2)
+
+	# endsem feedback
+	question3 = Question(
+		question="This course as a whole so far has been",
+		a='Poor',
+		b='Fair',
+		c='Good',
+		d='Very Good',
+		e='Excellent')
+	question3.save()
+
+	question4 = Question(
+		question="Feedback on course content",
+		a='Difficult',
+		b='Well-designed',
+		c='Poorly graded',
+		d='Learning experience',
+		e='Just right')
+	question4.save()
+
+	endsem_feedback = Feedback(
+		course=course,
+		title="End-semester Feedback",
+		description="")
+	endsem_feedback.save()
+	endsem_feedback.questions.add(question1)
+	endsem_feedback.questions.add(question2)
+
+
+def createDeadlines(course_code, midsem_date, midsem_time, endsem_date, endsem_time):
+	course = Course.objects.get(pk=course_code)
+	# midsem deadline
+	midsem_deadline = Deadline(
+		course=course,
+		assignment='Mid-semester exam',
+		submission_date=midsem_date,
+		submission_time=midsem_time)
+	midsem_deadline.save()
+
+	# midsem deadline
+	endsem_deadline = Deadline(
+		course=course,
+		assignment='End-semester exam',
+		submission_date=endsem_date,
+		submission_time=endsem_time)
+	endsem_deadline.save()	
+
 def add_course(request):
 
 	error = ""
@@ -143,6 +282,15 @@ def add_course(request):
 				course.name = course_form.cleaned_data.get('name')
 				course.code = course_form.cleaned_data.get('code')
 				course.save()
+
+				midsem_date = course_form.cleaned_data.get('midsem_date')
+				endsem_date = course_form.cleaned_data.get('endsem_date')
+				midsem_time = course_form.cleaned_data.get('midsem_time')
+				endsem_time = course_form.cleaned_data.get('endsem_time')
+
+
+				createFeedbacks(course.code)
+				createDeadlines(course.code, midsem_date, midsem_time, endsem_date, endsem_time)
 
 				return redirect('home')
 
@@ -446,7 +594,7 @@ def viewdeadlines(request):
 
 	if request.user.is_authenticated:
 
-		deadlines = Deadline.objects.all().order_by('submission_date')
+		deadlines = Deadline.objects.all().order_by('submission_date', 'submission_time')
 		context = {
 			'deadlines': deadlines,
 		}
