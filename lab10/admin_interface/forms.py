@@ -30,6 +30,9 @@ class CourseForm(forms.ModelForm):
 
 
 class FeedbackForm(forms.ModelForm):
+	submission_date = forms.DateField(input_formats=['%d %B, %Y'],
+									  widget=forms.DateInput(attrs={'class': 'datepicker'}))
+	submission_time = forms.TimeField(widget=forms.TimeInput(format='%H:%M'))
 	class Meta:
 		model = Feedback
 		fields = ('title', 'description')
@@ -63,9 +66,10 @@ class DeadlineForm(forms.ModelForm):
 									  widget=forms.DateInput(attrs={'class': 'datepicker'}))
 	class Meta:
 		model = Deadline
-		fields = ('assignment', 'submission_date', 'submission_time')
+		fields = ('assignment', 'submission_date', 'submission_time', 'is_feedback')
 		widgets = {
 			'submission_time': forms.TimeInput(format='%H:%M'),
+			'is_feedback': forms.CheckboxInput()
 		}
 
 

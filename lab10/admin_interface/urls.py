@@ -14,7 +14,7 @@ urlpatterns = [
 	url(r'^register/', views.register, name='register'),
 
 	url(r'^student/login/', views.student_login, name='studentlogin'),
-	# url(r'^student/login/', views.student_login, name='studentdeadlines'),
+	url(r'^student/deadlines/', views.student_deadlines, name='studentdeadlines'),
 
 	url(r'^addcourse/', views.add_course, name='addcourse'),
 	url(r'^enroll/$', views.enroll, name='enroll'),

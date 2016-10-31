@@ -2,11 +2,6 @@
 {% load static %}
 <style type="text/css">
     {% block style %}
-    	body {
-			/*background:url({% static 'img/bg5.jpeg' %}) no-repeat center center fixed;*/
-			background-color: white;
-			background-size:cover;
-		}
     {% endblock %}
 </style>
 
@@ -28,12 +23,44 @@
 	        <div class="input-field col s12 m6 offset-m3">
 	          	{{ form.title }}
 	          	{{ form.title.label_tag }}
+	          	{% if form.title.errors %}
+	          		{% for error in form.title.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
 	        </div>
 	    </div>
 	    <div class="row">
 	        <div class="input-field col s12 m6 offset-m3">
 	          	{{ form.description }}
 	          	{{ form.description.label_tag }}
+	          	{% if form.description.errors %}
+	          		{% for error in form.description.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
+	        </div>
+	    </div>
+
+	    <div class="row">
+	        <div class="input-field col s6">
+	        	{{ form.submission_date }}
+	          	{{ form.submission_date.label_tag }}
+	          	{% if form.submission_date.errors %}
+	          		{% for error in form.submission_date.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
+	        </div>
+	 
+	        <div class="input-field col s6">
+	        	{{ form.submission_time }}
+	          	{{ form.submission_time.label_tag }}
+	          	{% if form.submission_time.errors %}
+	          		{% for error in form.submission_time.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
 	        </div>
 	    </div>
 
@@ -51,12 +78,7 @@
 			{{ qformset.management_form }}
 
 			{% for qform in qformset %}
-
-				{% if qform.errors %}
-					<div class="row">
-						<p class="red">{{ qform.errors }}</p>
-					</div>
-				{% endif %}
+				
 
 				<div class="qformset">
 					<br><br>
@@ -72,27 +94,52 @@
 					<div class="row">
 						<div class="col s12">
 							{{ qform.a }}
+							{% if qform.a.errors %}
+								{% for error in qform.a.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
 						</div>
 					</div>
 					<div class="row">
 						<div class="col s12">
 							{{ qform.b }}
+							{% if qform.b.errors %}
+								{% for error in qform.b.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
 						</div>
 					</div>
 					<div class="row">
 						<div class="col s12">
 							{{ qform.c }}
+							{% if qform.c.errors %}
+								{% for error in qform.c.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
 						</div>
 					</div>
 					<div class="row">
 						<div class="col s12">
 							{{ qform.d }}
+							{% if qform.d.errors %}
+								{% for error in qform.d.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="col s12">
 							{{ qform.e }}
+							{% if qform.e.errors %}
+								{% for error in qform.e.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
 						</div>
 					</div>
 

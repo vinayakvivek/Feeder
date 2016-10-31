@@ -22,6 +22,8 @@ from django.forms.formsets import formset_factory
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+
 
 @csrf_exempt
 def student_login(request):
@@ -48,6 +50,32 @@ def student_login(request):
 			'valid': valid,
 			'name': name,
 			'error': error,
+		})
+
+
+@csrf_exempt
+def student_deadlines(request):
+	deadlines = []
+	if request.method == 'POST':
+		date = request.POST['date']
+		objs = Deadline.objects.filter(submission_date=date)
+		
+		for obj in objs:
+			deadline = {
+				'course': obj.course.code,
+				'assignment': obj.assignment,
+				'is_feedback': obj.is_feedback,
+				'submission_date': obj.submission_date,
+				'submission_time': obj.submission_time,
+				'feedback_id': None,
+			}
+			if obj.is_feedback:
+				deadline['feedback_id'] = obj.feedback.id
+
+			deadlines.append(deadline)
+
+	return JsonResponse({
+			'deadlines': deadlines,
 		})
 
 
@@ -226,8 +254,27 @@ def home(request):
 	view functions for special admin
 '''
 # creates the default midsem and endsem feedbacks
-def createFeedbacks(course_code):
+def createFeedbacks(course_code, midsem_date, midsem_time, endsem_date, endsem_time):
 	course = Course.objects.get(pk=course_code)
+
+	# midsem deadline
+	midsem_deadline = Deadline(
+		course=course,
+		assignment='Mid-semester Feedback',
+		submission_date=midsem_date,
+		submission_time=midsem_time,
+		is_feedback=True)
+	midsem_deadline.save()
+
+	# midsem deadline
+	endsem_deadline = Deadline(
+		course=course,
+		assignment='End-semester Feedback',
+		submission_date=endsem_date,
+		submission_time=endsem_time,
+		is_feedback=True)
+	endsem_deadline.save()
+
 	# Midsem feedback
 	question1 = Question(
 		question="This course as a whole so far has been",
@@ -250,7 +297,8 @@ def createFeedbacks(course_code):
 	midsem_feedback = Feedback(
 		course=course,
 		title="Mid-semester Feedback",
-		description="")
+		description="",
+		deadline=midsem_deadline)
 	midsem_feedback.save()
 	midsem_feedback.questions.add(question1)
 	midsem_feedback.questions.add(question2)
@@ -277,34 +325,15 @@ def createFeedbacks(course_code):
 	endsem_feedback = Feedback(
 		course=course,
 		title="End-semester Feedback",
-		description="")
+		description="",
+		deadline=endsem_deadline)
 	endsem_feedback.save()
 	endsem_feedback.questions.add(question1)
 	endsem_feedback.questions.add(question2)
 
-# creates midsem, endsem exam deadlines
-def createDeadlines(course_code, midsem_date, midsem_time, endsem_date, endsem_time):
-	course = Course.objects.get(pk=course_code)
-	# midsem deadline
-	midsem_deadline = Deadline(
-		course=course,
-		assignment='Mid-semester exam',
-		submission_date=midsem_date,
-		submission_time=midsem_time)
-	midsem_deadline.save()
-
-	# midsem deadline
-	endsem_deadline = Deadline(
-		course=course,
-		assignment='End-semester exam',
-		submission_date=endsem_date,
-		submission_time=endsem_time)
-	endsem_deadline.save()	
-
 
 def add_course(request):
 
-	error = ""
 	# only special admin can access this feature (adding course)
 	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
 
@@ -327,16 +356,14 @@ def add_course(request):
 				endsem_time = course_form.cleaned_data.get('endsem_time')
 
 
-				createFeedbacks(course.code)
-				createDeadlines(course.code, midsem_date, midsem_time, endsem_date, endsem_time)
+				createFeedbacks(course.code, midsem_date, midsem_time, endsem_date, endsem_time)
 
 				return redirect('home')
 
 			else:
-				error = str(course_form.errors)
+				print("invalid")
 				context = {
 					'form': course_form,
-					'error_msg': error,
 				}
 				return render(request, 'addcourse.html', context)
 
@@ -478,12 +505,26 @@ def newfeedback(request, course_code):
 
 			if feedback_form.is_valid() and question_formset.is_valid():
 
+				course = Course.objects.get(pk=course_code)
+
 				title = feedback_form.cleaned_data.get('title')
 				description = feedback_form.cleaned_data.get('description')
+				submission_date = feedback_form.cleaned_data.get('submission_date')
+				submission_time = feedback_form.cleaned_data.get('submission_time')
+
+				new_deadline = Deadline(
+					course=course,
+					assignment=title,
+					submission_date=submission_date,
+					submission_time=submission_time,
+					is_feedback=True)
+				new_deadline.save()
+
 				new_feedback = Feedback(
 							title=title,
 							description=description,
-							course=Course.objects.get(pk=course_code))
+							course=course,
+							deadline=deadline)
 				new_feedback.save()
 
 				for qform in question_formset:
@@ -502,6 +543,7 @@ def newfeedback(request, course_code):
 						errors = "Blank question"
 
 			else:
+				print("validation error - feedback form")
 				context = {
 					'errors': errors,
 					'form': feedback_form,

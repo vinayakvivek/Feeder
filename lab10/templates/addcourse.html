@@ -42,18 +42,16 @@
     		{% if form %}
 		    <form method="POST" action="{% url 'addcourse' %}">
 		    {% csrf_token %}   
-		    	{% if error_msg %}	
-			   		<div class="row">
-			            <div class="col s12">
-			            	<p class="red-text">{{ errrot_msg }}</p>
-			            </div>
-			        </div>
-		        {% endif %}
-
+		    	
 		    	<div class="row">
 			        <div class="input-field col s12">
 			          	{{ form.name }}
 			          	{{ form.name.label_tag }}
+			          	{% if form.name.errors %}
+			          		{% for error in form.name.errors %}
+			          			<div class="red-text">{{ error|escape }}</div>
+			          		{% endfor %}
+			          	{% endif %}
 			        </div>
 			    </div>		      
 		      
@@ -61,6 +59,11 @@
 			        <div class="input-field col s12">
 			        	{{ form.code }}
 			          	{{ form.code.label_tag }}
+			          	{% if form.code.errors %}
+			          		{% for error in form.code.errors %}
+			          			<div class="red-text">{{ error|escape }}</div>
+			          		{% endfor %}
+			          	{% endif %}
 			        </div>
 			    </div>
 
@@ -72,6 +75,11 @@
 			        <div class="input-field col s6">
 			        	{{ form.midsem_time }}
 			          	{{ form.midsem_time.label_tag }}
+			          	{% if form.midsem_time.errors %}
+			          		{% for error in form.midsem_time.errors %}
+			          			<div class="red-text">{{ error|escape }}</div>
+			          		{% endfor %}
+			          	{% endif %}
 			        </div>
 			    </div>
 
@@ -83,6 +91,11 @@
 			        <div class="input-field col s6">
 			        	{{ form.endsem_time }}
 			          	{{ form.endsem_time.label_tag }}
+			          	{% if form.endsem_time.errors %}
+			          		{% for error in form.endsem_time.errors %}
+			          			<div class="red-text">{{ error|escape }}</div>
+			          		{% endfor %}
+			          	{% endif %}
 			        </div>
 			    </div>
 

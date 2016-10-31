@@ -25,7 +25,7 @@
 		    {% csrf_token %}   
 
 				<div class="row">
-			        <div class="input-field col s12">
+			        <div class="col s12">
 			          	<p class="flow-text">New deadline in {{ course_code }}</p>
 			        </div>
 			    </div>
@@ -34,21 +34,33 @@
 			        <div class="input-field col s12">
 			          	{{ form.assignment }}
 			          	{{ form.assignment.label_tag }}
+			          	{% if form.assignment.errors %}
+			          		{% for error in form.assignment.errors %}
+			          			<div class="red-text">{{ error|escape }}</div>
+			          		{% endfor %}
+			          	{% endif %}
 			        </div>
-			    </div>		      
-		      
-			    <div class="row">
-			        <div class="input-field col s12">
-			        	{{ form.submission_date }}
-			          	{{ form.submission_date.label_tag }}
-			        </div>
-			    </div>
+			    </div>	
 
 			    <div class="row">
-			        <div class="input-field col s12">
+			        <div class="input-field col s6">
+			        	{{ form.submission_date }}
+			          	{{ form.submission_date.label_tag }}
+			          	{% if form.submission_date.errors %}
+			          		{% for error in form.submission_date.errors %}
+			          			<div class="red-text">{{ error|escape }}</div>
+			          		{% endfor %}
+			          	{% endif %}
+			        </div>
+			 
+			        <div class="input-field col s6">
 			        	{{ form.submission_time }}
 			          	{{ form.submission_time.label_tag }}
-			          	<div class="red-text">{{ form.submission_time.errors }}</div>
+			          	{% if form.submission_time.errors %}
+			          		{% for error in form.submission_time.errors %}
+			          			<div class="red-text">{{ error|escape }}</div>
+			          		{% endfor %}
+			          	{% endif %}
 			        </div>
 			    </div>
 
