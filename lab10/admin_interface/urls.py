@@ -12,6 +12,10 @@ urlpatterns = [
 	url(r'^googlelogin/', views.google_login, name='googlelogin'),
 	url(r'^logout/', views.user_logout, name='logout'),
 	url(r'^register/', views.register, name='register'),
+
+	url(r'^student/login/', views.student_login, name='studentlogin'),
+	# url(r'^student/login/', views.student_login, name='studentdeadlines'),
+
 	url(r'^addcourse/', views.add_course, name='addcourse'),
 	url(r'^enroll/$', views.enroll, name='enroll'),
 	url(r'^viewcourses/', views.view_courses, name='viewcourses'),

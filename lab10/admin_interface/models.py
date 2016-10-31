@@ -21,7 +21,7 @@ class Instructor(models.Model):
 class Student(models.Model):
 	name = models.CharField(max_length=100)
 	rollno = models.CharField(max_length=15, primary_key=True)
-	# password = models.CharField(max_length=50)
+	password = models.CharField(max_length=50)
 
 	def __str__(self):
 		return self.name

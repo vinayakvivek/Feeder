@@ -1,26 +1,57 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from admin_interface.forms import CourseForm
+from admin_interface.forms import DeadlineForm
+from admin_interface.forms import FeedbackForm
+from admin_interface.forms import QuestionForm
+from admin_interface.forms import UserForm
+from admin_interface.models import Course
+from admin_interface.models import Deadline
+from admin_interface.models import Feedback
+from admin_interface.models import Instructor
+from admin_interface.models import Question
+from admin_interface.models import Student
 from django.contrib.auth.models import User
-from admin_interface.models import Instructor, Course, Student, Feedback, Question, Deadline
-from admin_interface.forms import UserForm, CourseForm, FeedbackForm, QuestionForm, DeadlineForm
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
 
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
-from django.forms.formsets import formset_factory
 from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
+from django.forms.formsets import formset_factory
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
+def student_login(request):
+	valid = False
+	error = ""
+	name = ""
+	if request.method == 'POST':
+		rollno = request.POST['rollno']
+		password = request.POST['password']
+		if Student.objects.filter(pk=rollno).count() > 0:
+			student = Student.objects.get(pk=rollno)
+			if student.password == password:
+				valid = True
+				name = student.name
+			else:
+				error = "Invalid credentials"
+		else:
+			error = "Account does not exist"
+	else:
+		error = "Invalid request"
 
-def populateStudents():
-	f = open('admin_interface/student_list', 'r')
-	for line in f:
-		line = line.rstrip('\n').split(',')
-		# print(line[0], line[1])
-		if (Student.objects.filter(rollno=line[0]).count() == 0):
-			new_student = Student(rollno=line[0], name=line[1])
-			new_student.save()
+	return JsonResponse(
+		{
+			'valid': valid,
+			'name': name,
+			'error': error,
+		})
+
 
 def index(request):
-
-	populateStudents()
 
 	authenticated = False
 
