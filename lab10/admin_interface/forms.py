@@ -1,9 +1,13 @@
+from admin_interface.models import Course
+from admin_interface.models import Deadline
+from admin_interface.models import Feedback
+from admin_interface.models import Instructor
+from admin_interface.models import Question
 from django import forms
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.forms import Textarea
 from django.forms.formsets import BaseFormSet
-from django.contrib.auth.models import User
-from admin_interface.models import Instructor, Course, Question, Feedback, Deadline
-from django.conf import settings
 from django.utils import timezone
 
 class UserForm(forms.ModelForm):

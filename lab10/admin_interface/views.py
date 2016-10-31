@@ -51,6 +51,11 @@ def student_login(request):
 		})
 
 
+def mark_answer(request, rollno, password, question_id, answer):
+	print(rollno, password)
+	return HttpResponse("You marked " + str(answer) + ", for question " + str(question_id))
+
+
 def index(request):
 
 	authenticated = False
@@ -220,6 +225,7 @@ def home(request):
 '''
 	view functions for special admin
 '''
+# creates the default midsem and endsem feedbacks
 def createFeedbacks(course_code):
 	course = Course.objects.get(pk=course_code)
 	# Midsem feedback
@@ -276,7 +282,7 @@ def createFeedbacks(course_code):
 	endsem_feedback.questions.add(question1)
 	endsem_feedback.questions.add(question2)
 
-
+# creates midsem, endsem exam deadlines
 def createDeadlines(course_code, midsem_date, midsem_time, endsem_date, endsem_time):
 	course = Course.objects.get(pk=course_code)
 	# midsem deadline
@@ -295,10 +301,11 @@ def createDeadlines(course_code, midsem_date, midsem_time, endsem_date, endsem_t
 		submission_time=endsem_time)
 	endsem_deadline.save()	
 
+
 def add_course(request):
 
 	error = ""
-
+	# only special admin can access this feature (adding course)
 	if request.user.is_authenticated and Instructor.objects.get(user=request.user).special_admin:
 
 		if request.method == 'POST':
@@ -457,12 +464,12 @@ def addfeedback(request):
 		return redirect('login')
 
 
-# TODO : error checking
 def newfeedback(request, course_code):
 
 	if request.user.is_authenticated:
 
 		QFormSet = formset_factory(QuestionForm)
+		errors = ""
 
 		if request.method == 'POST':
 			
@@ -495,8 +502,8 @@ def newfeedback(request, course_code):
 						errors = "Blank question"
 
 			else:
-				# TODO
 				context = {
+					'errors': errors,
 					'form': feedback_form,
 					'qformset': question_formset,
 					'course_code': course_code,
@@ -547,12 +554,6 @@ def coursefeedbacks(request, course_code):
 
 	else:
 		return redirect('login')
-
-
-
-def mark_answer(request, rollno, password, question_id, answer):
-	print(rollno, password)
-	return HttpResponse("You marked " + str(answer) + ", for question " + str(question_id))
 
 
 def feedback_details(request, feedback_id):
