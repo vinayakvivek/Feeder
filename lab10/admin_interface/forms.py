@@ -12,10 +12,10 @@ from django.utils import timezone
 
 class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
-
+	username = forms.EmailField()
 	class Meta:
 		model = User
-		fields = ('email', 'password', 'first_name', 'last_name', 'username')
+		fields = ('password', 'first_name', 'last_name', 'username')
 
 class CourseForm(forms.ModelForm):
 	midsem_date = forms.DateField(input_formats=['%d %B, %Y'],

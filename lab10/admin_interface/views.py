@@ -161,10 +161,15 @@ def user_login(request):
 		password = request.POST.get('password')
 
 		user = authenticate(username=username, password=password)
-
 		if user:
 
-			if user.is_active:
+			if (Instructor.objects.get(email=user.email)).google_login:
+				print(Instructor.objects.get(email=user.email).google_login)
+				error = "This account already has a social login"
+				context = {'error_msg': error,}
+				return render(request, 'login.html', context)
+
+			elif user.is_active:
 
 				login(request, user)
 				return redirect('home')
@@ -193,42 +198,36 @@ def user_logout(request):
 def register(request):
 
 	registered = False
-	error_email = ""
 	error_passwd = ""
-
+	error_email = ""
 
 	if request.method == 'POST':
 
 		user_form = UserForm(data=request.POST)
-		print(user_form.data['password'])
-		print(request.POST.get('confirm_password'))
-		print(request.POST.get('confirm_password') == user_form.data['password'])
+
 		if (not user_form.is_valid()):
 			print(user_form.errors)
 
 		if (user_form.is_valid() and user_form.data['password'] == request.POST.get('confirm_password')):
 
-			email = user_form.cleaned_data.get('email') 
+			email = user_form.cleaned_data.get('username') 
 
-			if User.objects.filter(email=email).count() == 0:
+			user = user_form.save()
+			user.email = email
+			user.set_password(user.password)
+			user.save()
 
-				user = user_form.save()
+			profile = Instructor()
+			profile.user = user
+			profile.email = user.email
+			profile.save()
 
-				user.set_password(user.password)
-				user.save()
+			registered = True
 
-				profile = Instructor()
-				profile.user = user
-				profile.email = user.email
-				profile.save()
-
-				registered = True
-
-			else:
-				error_email = "Account with this email already exists"
-	
+		
 		elif (user_form.data['password'] != request.POST.get('confirm_password')):
 			error_passwd = "passwords do not match"
+
 
 	else:
 		user_form = UserForm()
@@ -236,8 +235,8 @@ def register(request):
 	context = {
 		'user_form': user_form,
 		'registered': registered,
-		'error_email': error_email,
 		'error_passwd': error_passwd,
+		'error_email': error_email,
 	}
 
 	return render(request, 'register.html', context)

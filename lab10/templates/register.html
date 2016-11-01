@@ -48,30 +48,21 @@
 			    		<div class="input-field col s6">
 			    			{{ user_form.first_name }}
 			    			{{ user_form.first_name.label_tag }}
-			    			<p class="red-text">{{ user_form.first_name.errors }}</p>
+			    			<span class="red-text">{{ user_form.first_name.errors }}</span>
 			    		</div>
 			    		<div class="input-field col s6">
 			    			{{ user_form.last_name }}
 			    			{{ user_form.last_name.label_tag }}
-			    			<p class="red-text">{{ user_form.last_name.errors }}</p>
+			    			<span class="red-text">{{ user_form.last_name.errors }}</span>
 			    		</div>
 			    	</div>
-			    	
-					
-					<div class="row">
-				        <div class="input-field col s12">
-				          	{{ user_form.email }}
-				         	{{ user_form.email.label_tag }}
-				         	<p class="red-text">{{ user_form.email.errors }}<br>{{ error_email }}</p>
-				        </div>
-				    </div>		      
-			      
-			      		
+			     
+
 				    <div class="row">
 				        <div class="input-field col s12">
 				          	{{ user_form.username }}
-				         	{{ user_form.username.label_tag }}
-				         	<p class="red-text">{{ user_form.username.errors }}</p>
+				         	<label for="{{ user_form.username.id_for_label }}">Email</label>
+				         	<span class="red-text">{{ user_form.username.errors }}</span>
 				        </div>
 				    </div>
 
@@ -79,7 +70,7 @@
 				        <div class="input-field col s12">
 				        	{{ user_form.password }}
 				         	{{ user_form.password.label_tag }}
-				         	<p class="red-text">{{ user_form.password.errors }}<br>{{ error_passwd }}</p>
+				         	<span class="red-text">{{ user_form.password.errors }}<br>{{ error_passwd }}</span>
 				        </div>
 				    </div>
 
