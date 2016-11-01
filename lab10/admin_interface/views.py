@@ -192,20 +192,23 @@ def user_logout(request):
 
 def register(request):
 
-	if request.user.is_authenticated:
-		return redirect('index')
-
 	registered = False
-	error = ""
+	error_email = ""
+	error_passwd = ""
 
 
 	if request.method == 'POST':
 
 		user_form = UserForm(data=request.POST)
+		print(user_form.data['password'])
+		print(request.POST.get('confirm_password'))
+		print(request.POST.get('confirm_password') == user_form.data['password'])
+		if (not user_form.is_valid()):
+			print(user_form.errors)
 
-		if user_form.is_valid():
+		if (user_form.is_valid() and user_form.data['password'] == request.POST.get('confirm_password')):
 
-			email = user_form.cleaned_data.get('email')
+			email = user_form.cleaned_data.get('email') 
 
 			if User.objects.filter(email=email).count() == 0:
 
@@ -221,28 +224,20 @@ def register(request):
 
 				registered = True
 
-				username = user_form.cleaned_data.get('username')
-				password = user_form.cleaned_data.get('password')
-				user = authenticate(username=username, password=password)
-				if user:
-					if user.is_active:
-						login(request, user)
-						return redirect('home')
-
-				return redirect('login')
-
 			else:
-				error = "Account with this email already exists"
-		else:
-			error = str(user_form.errors)
+				error_email = "Account with this email already exists"
 	
+		elif (user_form.data['password'] != request.POST.get('confirm_password')):
+			error_passwd = "passwords do not match"
+
 	else:
 		user_form = UserForm()
 
 	context = {
 		'user_form': user_form,
 		'registered': registered,
-		'error_msg': error,
+		'error_email': error_email,
+		'error_passwd': error_passwd,
 	}
 
 	return render(request, 'register.html', context)

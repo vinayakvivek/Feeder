@@ -15,7 +15,7 @@ class UserForm(forms.ModelForm):
 
 	class Meta:
 		model = User
-		fields = ('username', 'email', 'password')
+		fields = ('email', 'password', 'first_name', 'last_name', 'username')
 
 class CourseForm(forms.ModelForm):
 	midsem_date = forms.DateField(input_formats=['%d %B, %Y'],

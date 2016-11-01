@@ -13,50 +13,81 @@
 
 {% block content %}
 
-{% if not registered %}
+{% if user.is_authenticated %}
+	<div class="row">
+		<div class="card-panel row main-center">
+	
+			<div class="row center-align">
+			   	<p class="flow-text">Already logged in as <strong>{{ user }}</strong></p>
+			</div>
+			  
+			<div class="row col s6 center-align">
+			   	<a href="{% url 'logout' %}" class="btn waves-effect waves-light blue">Logout</a>
+			</div> 
+	
+			<div class="row col s6 center-align">
+			   	<a href="{% url 'home' %}" class="btn waves-effect waves-light blue">Home</a>
+			</div> 
+	
+		</div>
+	</div>
+
+
+{% elif not registered %}
 	<div class="">
 		<div id="login-page" class="row">
 			<div class="card-panel row main-center">
 
 				<div class="row center-align">
-	    			<p class="red-text">{{ error_msg }}</p>
+	    			<p class="red-text">{{ user_form.non_field_errors }}<br>{{ error_msg }}</p>
 	    		</div>
 
 			    <form method="POST" action="{% url 'register' %}">
 			    {% csrf_token %}
 			    	<div class="row">
-				        <div class="input-field col s12">
-				          	{{ user_form.username }}
-				          	{{ user_form.username.label_tag }}
-				          	{% if user_form.username.errors %}
-				          		{% for error in user_form.username.errors %}
-				          			<div class="red-text">{{ error|escape }</div>
-				          		{% endfor %}
-				          	{% endif %}
-				        </div>
-				    </div>	
+			    		<div class="input-field col s6">
+			    			{{ user_form.first_name }}
+			    			{{ user_form.first_name.label_tag }}
+			    			<p class="red-text">{{ user_form.first_name.errors }}</p>
+			    		</div>
+			    		<div class="input-field col s6">
+			    			{{ user_form.last_name }}
+			    			{{ user_form.last_name.label_tag }}
+			    			<p class="red-text">{{ user_form.last_name.errors }}</p>
+			    		</div>
+			    	</div>
+			    	
 					
 					<div class="row">
 				        <div class="input-field col s12">
 				          	{{ user_form.email }}
 				         	{{ user_form.email.label_tag }}
-				         	{% if user_form.email.errors %}
-				          		{% for error in user_form.email.errors %}
-				          			<div class="red-text">{{ error|escape }</div>
-				          		{% endfor %}
-				          	{% endif %}
+				         	<p class="red-text">{{ user_form.email.errors }}<br>{{ error_email }}</p>
 				        </div>
 				    </div>		      
 			      
+			      		
+				    <div class="row">
+				        <div class="input-field col s12">
+				          	{{ user_form.username }}
+				         	{{ user_form.username.label_tag }}
+				         	<p class="red-text">{{ user_form.username.errors }}</p>
+				        </div>
+				    </div>
+
 				    <div class="row">
 				        <div class="input-field col s12">
 				        	{{ user_form.password }}
 				         	{{ user_form.password.label_tag }}
-				         	{% if user_form.password.errors %}
-				          		{% for error in user_form.password.errors %}
-				          			<div class="red-text">{{ error|escape }</div>
-				          		{% endfor %}
-				          	{% endif %}
+				         	<p class="red-text">{{ user_form.password.errors }}<br>{{ error_passwd }}</p>
+				        </div>
+				    </div>
+
+				    <div class="row">
+				        <div class="input-field col s12">
+				        <input id="confirm_password" type="password" class="validate" name="confirm_password">
+			      	    <label for="confirm_password">Confirm Password</label>
+
 				        </div>
 				    </div>
 
@@ -77,17 +108,17 @@
 		</div>
 	</div>
 
-{% else %}
+{% elif registered %}
 
 	<div class="row">
 		<div class="card-panel row main-center">
 
 		    <div class="row center-align">
-		    	<p class="flow-text">Logged in as <strong>{{ user }}</strong></p>
+		    	<p class="flow-text">Successfully registered.</p>
 		    </div>
 		  
 		    <div class="row center-align">
-		    	<a href="{% url 'home' %}" class="btn waves-effect waves-light blue">Home</a>
+		    	<a href="{% url 'login' %}" class="btn waves-effect waves-light blue">Login</a>
 		    </div> 
 
 		</div>
