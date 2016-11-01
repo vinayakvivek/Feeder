@@ -56,7 +56,7 @@ class Question(models.Model):
 
 
 class Objectiveanswer(models.Model):
-	question = models.OneToOneField(Question)
+	question = models.OneToOneField(Question, on_delete=models.CASCADE)
 	count_a = models.IntegerField(default=0)
 	count_b = models.IntegerField(default=0)
 	count_c = models.IntegerField(default=0)

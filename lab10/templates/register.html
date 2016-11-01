@@ -28,6 +28,11 @@
 				        <div class="input-field col s12">
 				          	{{ user_form.username }}
 				          	{{ user_form.username.label_tag }}
+				          	{% if user_form.username.errors %}
+				          		{% for error in user_form.username.errors %}
+				          			<div class="red-text">{{ error|escape }</div>
+				          		{% endfor %}
+				          	{% endif %}
 				        </div>
 				    </div>	
 					
@@ -35,6 +40,11 @@
 				        <div class="input-field col s12">
 				          	{{ user_form.email }}
 				         	{{ user_form.email.label_tag }}
+				         	{% if user_form.email.errors %}
+				          		{% for error in user_form.email.errors %}
+				          			<div class="red-text">{{ error|escape }</div>
+				          		{% endfor %}
+				          	{% endif %}
 				        </div>
 				    </div>		      
 			      
@@ -42,6 +52,11 @@
 				        <div class="input-field col s12">
 				        	{{ user_form.password }}
 				         	{{ user_form.password.label_tag }}
+				         	{% if user_form.password.errors %}
+				          		{% for error in user_form.password.errors %}
+				          			<div class="red-text">{{ error|escape }</div>
+				          		{% endfor %}
+				          	{% endif %}
 				        </div>
 				    </div>
 

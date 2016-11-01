@@ -9,6 +9,8 @@ from admin_interface.models import Feedback
 from admin_interface.models import Instructor
 from admin_interface.models import Question
 from admin_interface.models import Student
+from admin_interface.models import Objectiveanswer
+
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -57,8 +59,8 @@ def student_login(request):
 def student_deadlines(request):
 	deadlines = []
 	if request.method == 'POST':
-		date = request.POST['date']
-		objs = Deadline.objects.filter(submission_date=date)
+		# date = request.POST['date']
+		objs = Deadline.objects.all()
 		
 		for obj in objs:
 			deadline = {
@@ -69,7 +71,7 @@ def student_deadlines(request):
 				'submission_time': obj.submission_time,
 				'feedback_id': None,
 			}
-			if obj.is_feedback:
+			if hasattr(obj, 'feedback'):
 				deadline['feedback_id'] = obj.feedback.id
 
 			deadlines.append(deadline)
@@ -107,11 +109,10 @@ def google_login(request):
 		name = request.POST['name'].split(' ')[0]
 		id = request.POST['ID']
 
-		print(name)
-		
 		if Instructor.objects.filter(email=email).count() > 0:
 			instructor = Instructor.objects.get(email=email)
 			if instructor.google_login == True:
+				# google ID is the password for google_login user
 				user = authenticate(username=email, password=id)
 				if user:
 					if user.is_active:
@@ -123,7 +124,7 @@ def google_login(request):
 					error = "Invalid credentials"
 		
 		else:
-			print('new user')
+			print('new google user')
 
 			user = User()
 			user.username = email
@@ -136,7 +137,7 @@ def google_login(request):
 				email=email,
 				google_login=True)
 			new_instructor.save()
-
+			# google ID is the password for google_login user
 			user = authenticate(username=email, password=id)
 			if user:
 				if user.is_active:
@@ -147,8 +148,7 @@ def google_login(request):
 			else:
 				error = "Invalid credentials"
 
-	print(logged_in)
-
+	print("here " + str(logged_in))
 	return render(request, 'google-login.html', {'logged_in': logged_in})
 
 def user_login(request):
@@ -205,19 +205,34 @@ def register(request):
 
 		if user_form.is_valid():
 
-			user = user_form.save()
+			email = user_form.cleaned_data.get('email')
 
-			user.set_password(user.password)
-			user.save()
+			if User.objects.filter(email=email).count() == 0:
 
-			profile = Instructor()
-			profile.user = user
-			profile.email = user.email
-			profile.save()
+				user = user_form.save()
 
-			registered = True
-			return redirect('login')
+				user.set_password(user.password)
+				user.save()
 
+				profile = Instructor()
+				profile.user = user
+				profile.email = user.email
+				profile.save()
+
+				registered = True
+
+				username = user_form.cleaned_data.get('username')
+				password = user_form.cleaned_data.get('password')
+				user = authenticate(username=username, password=password)
+				if user:
+					if user.is_active:
+						login(request, user)
+						return redirect('home')
+
+				return redirect('login')
+
+			else:
+				error = "Account with this email already exists"
 		else:
 			error = str(user_form.errors)
 	
@@ -284,6 +299,8 @@ def createFeedbacks(course_code, midsem_date, midsem_time, endsem_date, endsem_t
 		d='Very Good',
 		e='Excellent')
 	question1.save()
+	answer = Objectiveanswer(question=question1)
+	answer.save()
 
 	question2 = Question(
 		question="Feedback on course content",
@@ -293,6 +310,8 @@ def createFeedbacks(course_code, midsem_date, midsem_time, endsem_date, endsem_t
 		d='Learning experience',
 		e='Just right')
 	question2.save()
+	answer = Objectiveanswer(question=question2)
+	answer.save()
 
 	midsem_feedback = Feedback(
 		course=course,
@@ -312,6 +331,8 @@ def createFeedbacks(course_code, midsem_date, midsem_time, endsem_date, endsem_t
 		d='Very Good',
 		e='Excellent')
 	question3.save()
+	answer = Objectiveanswer(question=question3)
+	answer.save()
 
 	question4 = Question(
 		question="Feedback on course content",
@@ -321,6 +342,8 @@ def createFeedbacks(course_code, midsem_date, midsem_time, endsem_date, endsem_t
 		d='Learning experience',
 		e='Just right')
 	question4.save()
+	answer = Objectiveanswer(question=question4)
+	answer.save()
 
 	endsem_feedback = Feedback(
 		course=course,
@@ -524,7 +547,7 @@ def newfeedback(request, course_code):
 							title=title,
 							description=description,
 							course=course,
-							deadline=deadline)
+							deadline=new_deadline)
 				new_feedback.save()
 
 				for qform in question_formset:
@@ -535,12 +558,11 @@ def newfeedback(request, course_code):
 					d = qform.cleaned_data.get('d')
 					e = qform.cleaned_data.get('e')
 
-					if question:
-						new_question = Question(question=question, a=a, b=b, c=c, d=d, e=e)
-						new_question.save()
-						new_feedback.questions.add(new_question)
-					else:
-						errors = "Blank question"
+					new_question = Question(question=question, a=a, b=b, c=c, d=d, e=e)
+					new_question.save()
+					answer = Objectiveanswer(question=new_question)
+					answer.save()
+					new_feedback.questions.add(new_question)
 
 			else:
 				print("validation error - feedback form")

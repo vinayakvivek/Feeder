@@ -12,16 +12,13 @@
 {% endblock %}
 
 {% block content %}
-
-	    <div class="row center-align">
-	    	<p>Go to <a href="{% url 'home' %}">Home</a></p>
+	
+	    <div class="row">
+	    	<p><a href="{% url 'home' %}" class="btn orange">Go to Home</a></p>
 	    </div>
-  
-
-    <p class="row center-align">Or Sign in with google</p>
-    <div class="row center-align" style="margin-left: 85px">
-    	<div class="g-signin2" data-onsuccess="onSignIn"></div>
-    </div>
+	    <div class="row center-align">
+	    	<div class="g-signin2 col s4" data-onsuccess="onSignIn"></div>
+	    </div>
 
 {% endblock %}
 

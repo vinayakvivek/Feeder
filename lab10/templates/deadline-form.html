@@ -64,9 +64,9 @@
 			        </div>
 			    </div>
 
-			    <div class="row">
-		            <div class="input-field col s6 m3">
-		            	<input type="submit" name="submit" value="Create deadline" class="btn waves-effect waves-light col s12">
+			    <div class="row center-align">
+		            <div class="input-field col s4 offset-s4">
+		            	<input type="submit" name="submit" value="Create deadline" class="btn blue waves-effect waves-light col s12">
 		            </div>
 		        </div>
 		    </form>
@@ -74,8 +74,10 @@
 		    {% endif %}
 
 			<div class="row center-align">
-	            <a href="{% url 'home' %}" class="btn">back to home</a>
-	        </div>		    
+				<div class="col s4 offset-s4">
+					<a href="{% url 'home' %}" class="btn">Go back to Home</a>
+				</div>
+			</div>		    
 		    
 	</div>
 </div>
