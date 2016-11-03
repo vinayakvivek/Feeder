@@ -10,8 +10,34 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.meluhans.feeder33.LoginActivity">
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:inputType="text"
+        android:ems="10"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:id="@+id/rollno"
+        android:hint="@string/rollno" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:layout_below="@+id/rollno"
+        android:layout_alignLeft="@+id/rollno"
+        android:layout_alignStart="@+id/rollno"
+        android:layout_marginTop="48dp"
+        android:id="@+id/password"
+        android:hint="@string/password" />
+
+    <Button
+        android:text="@string/logInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/logInButton" />
 </RelativeLayout>
