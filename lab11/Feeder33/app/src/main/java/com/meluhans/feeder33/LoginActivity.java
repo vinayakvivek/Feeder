@@ -1,5 +1,6 @@
 package com.meluhans.feeder33;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+	    checkIfAuthenticated();
+
 	    rollno = (EditText) findViewById(R.id.rollno);
 	    password = (EditText) findViewById(R.id.password);
 	    logInButton = (Button) findViewById(R.id.logInButton);
@@ -52,6 +55,21 @@ public class LoginActivity extends AppCompatActivity {
 	    });
     }
 
+	// checks if already someone is logged in or not
+	// if logged in, redirects to dashboard
+	public void checkIfAuthenticated() {
+		SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+		Boolean authenticated = pref.getBoolean(PREF_AUTH_KEY, false);
+
+		if (authenticated) {
+			toast("Logged in as " + pref.getString(PREF_USER_KEY, ""));
+			goToDashboard();
+		}
+	}
+
+	// sends a POST request to Django server with rollNumber and password
+	// server returns a JSON response, with three fields - "valid", "name", "error"
+	// if valid is true, then credentials are valid and redirects to dashboard
 	public void logIn(final String rollNumber, final String password) {
 
 		String url = "http://10.0.2.2:8033/student/login/";
@@ -66,8 +84,9 @@ public class LoginActivity extends AppCompatActivity {
 							String valid = jsonObject.getString("valid");
 							String name = jsonObject.getString("name");
 							if (valid.compareTo("true") == 0) {
-								toast("Authenticated");
-								saveInPref(name, rollNumber);
+								toast("Welcome " + name);
+								saveInPref(rollNumber, name);
+								goToDashboard();
 							} else {
 								toast(jsonObject.getString("error"));
 							}
@@ -99,6 +118,13 @@ public class LoginActivity extends AppCompatActivity {
 
 	}
 
+	// redirects to DashboardActivity
+	public void goToDashboard() {
+		Intent intent = new Intent(this, DashboardActivity.class);
+		startActivity(intent);
+	}
+
+	// saves credentials (rollNumber, name, authentication status) in SharedPreferences
 	public void saveInPref(String rollNumber, String name) {
 		SharedPreferences pref = getApplicationContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 		SharedPreferences.Editor editor = pref.edit();
@@ -109,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
 		editor.commit();
 	}
 
+	// creates a toast with given text
 	public void toast(String text) {
 		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
 	}
