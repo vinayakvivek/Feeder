@@ -3,6 +3,4 @@
     <string name="rollno">Roll No.</string>
     <string name="password">Password</string>
     <string name="logInButton">Log In</string>
-    <string name="authenticated">Authenticated</string>
-    <string name="user">user</string>
 </resources>
