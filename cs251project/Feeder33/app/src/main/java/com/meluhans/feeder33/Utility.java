@@ -24,6 +24,6 @@ public class Utility {
 
 	public static Time stringToTime(String timeString) throws ParseException {
 		SimpleDateFormat ft = new SimpleDateFormat ("HH:mm");
-		return (Time) ft.parse(timeString);
+		return new Time(ft.parse(timeString).getTime());
 	}
 }

@@ -122,6 +122,13 @@ public class CalendarActivity extends AppCompatActivity {
 			@Override
 			public void onSelectDate(Date date, View view) {
 				toast(Utility.dateToString(date));
+				DeadlineFragment deadlineFragment = new DeadlineFragment();
+				Bundle args = new Bundle();
+				args.putString("date", Utility.dateToString(date));
+				deadlineFragment.setArguments(args);
+				getSupportFragmentManager().beginTransaction()
+						.replace(R.id.list_container, deadlineFragment)
+						.commit();
 			}
 		};
 		caldroidFragment = new CaldroidFragment();
@@ -134,8 +141,13 @@ public class CalendarActivity extends AppCompatActivity {
 		caldroidFragment.setArguments(args);
 		caldroidFragment.setCaldroidListener(listener);
 
+		DeadlineFragment deadlineFragment = new DeadlineFragment();
+		args = new Bundle();
+		deadlineFragment.setArguments(args);
+
 		getSupportFragmentManager().beginTransaction()
 				.add(R.id.calender_container, caldroidFragment)
+				.add(R.id.list_container, deadlineFragment)
 				.commit();
 	}
 
