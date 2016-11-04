@@ -47,7 +47,7 @@ class Question(models.Model):
 	e = models.CharField(max_length=100)
 	
 	def __str__(self):
-		return self.question
+		return self.id
 
 	def clean(self):
 		from django.core.exceptions import ValidationError
