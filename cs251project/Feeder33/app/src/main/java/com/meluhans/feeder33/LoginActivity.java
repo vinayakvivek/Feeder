@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 	public static final String PREF_ROLLNO_KEY = "rollno";
 	public static final String PREF_AUTH_KEY = "authenticated";
 
-	public static final String BASE_URL = "http://10.0.2.2:8033/student/";
+	public static final String BASE_URL = "http://192.168.0.104:8033/student/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

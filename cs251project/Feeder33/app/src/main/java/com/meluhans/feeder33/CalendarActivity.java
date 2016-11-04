@@ -61,8 +61,12 @@ public class CalendarActivity extends AppCompatActivity {
 		initialise();
 	}
 
+	/**
+	 * Tries to fetch data from server
+	 * if server is offline, looks for offline data
+	 * parses the data obtained and then calendar is initialised
+	 */
 	public void initialise() {
-
 		String url = LoginActivity.BASE_URL + "deadlines/";
 		RequestQueue queue = Volley.newRequestQueue(this);
 		StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -114,9 +118,11 @@ public class CalendarActivity extends AppCompatActivity {
 			}
 		};
 		queue.add(postRequest);
-
 	}
 
+	/**
+	 * Initialises Caldroid fragment and Deadline fragment
+	 */
 	public void initialiseCalendar() {
 		listener = new CaldroidListener() {
 			@Override
@@ -151,6 +157,12 @@ public class CalendarActivity extends AppCompatActivity {
 				.commit();
 	}
 
+	/**
+	 * Parses JSON data and populates courses, courseColorMap and dateColorMap
+	 * @param jsonObject
+	 * @throws JSONException
+	 * @throws ParseException
+	 */
 	public void parseData(JSONObject jsonObject) throws JSONException, ParseException {
 		JSONArray deadlines = jsonObject.getJSONArray("deadlines");
 
@@ -174,6 +186,10 @@ public class CalendarActivity extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Saves passes data as a String in Shared Preferences
+	 * @param jsonObject
+	 */
 	public void saveDeadlines(JSONObject jsonObject) {
 		SharedPreferences pref = getApplicationContext().getSharedPreferences(LoginActivity.PREF_NAME, MODE_PRIVATE);
 		SharedPreferences.Editor editor = pref.edit();

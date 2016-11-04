@@ -23,7 +23,14 @@
             android:name=".DashboardActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".CalendarActivity">
+        <activity
+            android:name=".CalendarActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
+        <activity android:name=".DetailActivity">
+        </activity>
+        <activity android:name=".FeedbackActivity">
         </activity>
     </application>
 

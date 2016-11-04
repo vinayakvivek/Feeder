@@ -1,13 +1,16 @@
 package com.meluhans.feeder33;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +44,7 @@ public class DeadlineFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_deadline, container, false);
 
 		deadlineListView = (ListView) view.findViewById(R.id.deadlineListView);
-		deadlineList = new ArrayList<DeadlineItem>();
+		deadlineList = new ArrayList<>();
 
 		date = getArguments().getString("date", null);
 
@@ -49,7 +52,7 @@ public class DeadlineFragment extends Fragment {
 			if (date == null)
 				populateList();
 			else
-				updateList(date);
+				populateList(date);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
@@ -59,9 +62,39 @@ public class DeadlineFragment extends Fragment {
 		adapter = new DeadlineListAdapter(getActivity().getApplicationContext(), deadlineList, R.layout.item_deadline);
 		deadlineListView.setAdapter(adapter);
 
+		deadlineListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				DeadlineItem item = deadlineList.get(position);
+				if (item.getIsFeedback()) {
+					int feedbackId = item.getFeedbackId();
+					SharedPreferences pref = getActivity().getSharedPreferences(LoginActivity.PREF_NAME, MODE_PRIVATE);
+					if (pref.contains(Integer.toString(feedbackId) + "_" + pref.getString(LoginActivity.PREF_USER_KEY, null))) {
+						toast("You have already filled this feedback :)");
+					} else {
+						Intent intent = new Intent(getActivity(), FeedbackActivity.class);
+						intent.putExtra("id", feedbackId);
+						startActivity(intent);
+					}
+				} else {
+					Intent intent = new Intent(getActivity(), DetailActivity.class);
+					intent.putExtra("course", item.getCourseCode());
+					intent.putExtra("assignment", item.getAssignment());
+					intent.putExtra("date", Utility.dateToString(item.getSubmissionDate()));
+					intent.putExtra("time", Utility.timeToString(item.getSubmissionTime()));
+					startActivity(intent);
+				}
+			}
+		});
+
 		return view;
 	}
 
+	/**
+	 * populates deadlineList with all the deadlines available
+	 * @throws JSONException
+	 * @throws ParseException
+	 */
 	public void populateList() throws JSONException, ParseException {
 		SharedPreferences pref = getActivity().getSharedPreferences(LoginActivity.PREF_NAME, MODE_PRIVATE);
 		if (pref.contains(CalendarActivity.PREF_DEADLINE_KEY)) {
@@ -99,8 +132,13 @@ public class DeadlineFragment extends Fragment {
 		}
 	}
 
-	public void updateList(String date) throws JSONException, ParseException {
-
+	/**
+	 * populates deadlineList with deadlines with submission date as given parameter
+	 * @param date
+	 * @throws JSONException
+	 * @throws ParseException
+	 */
+	public void populateList(String date) throws JSONException, ParseException {
 		SharedPreferences pref = getActivity().getSharedPreferences(LoginActivity.PREF_NAME, MODE_PRIVATE);
 		if (pref.contains(CalendarActivity.PREF_DEADLINE_KEY)) {
 			String response = pref.getString(CalendarActivity.PREF_DEADLINE_KEY, null);
@@ -134,5 +172,9 @@ public class DeadlineFragment extends Fragment {
 				}
 			}
 		}
+	}
+
+	public void toast(String text) {
+		Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
 	}
 }
