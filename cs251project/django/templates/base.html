@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  	<title>{% block head_title %}Feed'er{% endblock %}</title>
+
+  	<!-- CSS  -->
+  	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  	<link href="{% static 'materialize/css/materialize.min.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+  	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- for C3js -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/c3/0.1.29/c3.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/c3/0.1.29/c3.css" rel="stylesheet" type="text/css">
+
+	<meta name="google-signin-client_id" content="371868661146-mmvbmpesoq4rdgcmms8n415ll0l3tdit.apps.googleusercontent.com">
+
+  <style type="text/css">
+	    {% block style %}
+	    {% endblock %}
+	</style>
+
+</head>
+
+<body>
+
+	{% block navbar %}
+		{% include 'navbar.html' %}
+	{% endblock %}
+
+    
+    {% block content %}
+    {% endblock %}
+    
+    <!--  Scripts-->
+  	<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+  	<script src="{% static 'materialize/js/materialize.js' %}"></script>
+
+    <script type="text/javascript">
+      // for tooltips
+      $(document).ready(function(){
+        $('.tooltipped').tooltip({delay: 50});
+      });
+      $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15 // Creates a dropdown of 15 years to control year
+      });
+    </script>
+  	<script type="text/javascript">
+     {% block script %}
+     {% endblock %} 
+    </script>
+
+</body>

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+<nav class="light-green" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="{% url 'home' %}" class="brand-logo">Dashboard</a>
+      <ul class="right">
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="container center-align">
+	<p class="flow-text">Welcome {{ user }}</p>
+	{% if is_special %}
+		<p class="">You are a special admin</p>
+	{% endif %}
+</div>
+
+<br><br>
+<div class="container">
+	{% if is_special %}
+	<div class="row">
+		<div class="col s12 m12 l6 offset-l3">
+			<div class="card small">
+			    <div class="card-image waves-effect waves-block waves-light">
+			      	<img class="activator" src="{% static 'img/courses.png' %}">
+			    </div>
+			    <div class="card-content">
+			        <span class="card-title activator grey-text text-darken-4">Courses<i class="material-icons right">more_vert</i></span>
+			        <div class="row">
+			        	<div class="col s3 center-align">
+			        		<a href="{% url 'addcourse' %}" class="waves-effect waves-light btn blue">Add</a>
+			        	</div>
+			        	<div class="col s3 center-align">
+			        		<a href="{% url 'viewcourses' %}" class="waves-effect waves-light btn">View</a>
+			        	</div>
+			        </div>
+			    </div>
+			    
+			</div>
+		</div>
+	</div>
+	
+	{% else %}
+	<div class="row">
+		<div class="col s12 m12 l6">
+			<div class="card small">
+			    <div class="card-image waves-effect waves-block waves-light">
+			      	<img class="activator" src="{% static 'img/feedback_form.jpg' %}">
+			    </div>
+			    <div class="card-content">
+			        <span class="card-title activator grey-text text-darken-4">Feedback<i class="material-icons right">more_vert</i></span>
+			        <div class="row">
+			        	<div class="col s3 center-align">
+			        		<a href="{% url 'addfeedback' %}" class="waves-effect waves-light btn blue">Add</a>
+			        	</div>
+			        	<div class="col s3 center-align">
+			        		<a href="{% url 'viewfeedback' %}" class="waves-effect waves-light btn">View</a>
+			        	</div>
+			        </div>
+			    </div>
+			    
+			</div>
+		</div>
+
+		<div class="col s12 m12 l6">
+			<div class="card small">
+			    <div class="card-image waves-effect waves-block waves-light">
+			      	<img class="activator" src="{% static 'img/deadlines.jpg' %}">
+			    </div>
+			    <div class="card-content">
+			        <span class="card-title activator grey-text text-darken-4">Deadlines<i class="material-icons right">more_vert</i></span>
+			        <div class="row">
+			        	<div class="col s3 center-align">
+			        		<a href="{% url 'add_deadline' %}" class="waves-effect waves-light btn blue">Add</a>
+			        	</div>
+			        	<div class="col s3 center-align">
+			        		<a href="{% url 'viewdeadlines' %}" class="waves-effect waves-light btn">View</a>
+			        	</div>
+			        </div>
+			    </div>
+			  
+			</div>
+		</div>
+	</div>
+
+	{% endif %}
+</div>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+<style type="text/css">
+    {% block style %}
+    {% endblock %}
+</style>
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+	<div class="card col s12 m8 offset-m2">
+		<p class="flow-text center-align">New feedback for {{ course_code }}</p>
+	</div>
+
+	<form method="POST" action="{% url 'newfeedback' course_code %}">
+		{% csrf_token %}
+
+		<div class="row">
+	        <div class="input-field col s12 m6 offset-m3">
+	          	{{ form.title }}
+	          	{{ form.title.label_tag }}
+	          	{% if form.title.errors %}
+	          		{% for error in form.title.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
+	        </div>
+	    </div>
+	    <div class="row">
+	        <div class="input-field col s12 m6 offset-m3">
+	          	{{ form.description }}
+	          	{{ form.description.label_tag }}
+	          	{% if form.description.errors %}
+	          		{% for error in form.description.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
+	        </div>
+	    </div>
+
+	    <div class="row">
+	        <div class="input-field col s6">
+	        	{{ form.submission_date }}
+	          	{{ form.submission_date.label_tag }}
+	          	{% if form.submission_date.errors %}
+	          		{% for error in form.submission_date.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
+	        </div>
+	 
+	        <div class="input-field col s6">
+	        	{{ form.submission_time }}
+	          	{{ form.submission_time.label_tag }}
+	          	{% if form.submission_time.errors %}
+	          		{% for error in form.submission_time.errors %}
+	          			<div class="red-text">{{ error|escape }}</div>
+	          		{% endfor %}
+	          	{% endif %}
+	        </div>
+	    </div>
+
+		<br>
+
+		<div class="row">
+			<div class="card col s12 m8 offset-m2">
+				<p class=""><strong>Questions</strong></p>
+			</div>
+		</div>
+
+		<div class="row center-align">
+		<div id="questions" class="container">
+
+			{{ qformset.management_form }}
+
+			{% for qform in qformset %}
+				
+
+				<div class="qformset">
+					<br><br>
+					<div class="row">
+						<div class="col s1">
+							<i class="material-icons">play_arrow</i>
+						</div>
+						<div class="col s11">
+							{{ qform.question }}
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s12">
+							{{ qform.a }}
+							{% if qform.a.errors %}
+								{% for error in qform.a.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col s12">
+							{{ qform.b }}
+							{% if qform.b.errors %}
+								{% for error in qform.b.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col s12">
+							{{ qform.c }}
+							{% if qform.c.errors %}
+								{% for error in qform.c.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col s12">
+							{{ qform.d }}
+							{% if qform.d.errors %}
+								{% for error in qform.d.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s12">
+							{{ qform.e }}
+							{% if qform.e.errors %}
+								{% for error in qform.e.errors %}
+									<div class="red-text">{{ error|escape }}</div>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+
+				</div>
+
+			{% endfor %}
+		</div>
+		</div>
+		<br><br>
+		<div class="row center-align">
+			<button class="btn blue" type="submit" name="submit">Submit</button>
+		</div>
+	</form>
+
+	<div class="row center-align">
+		<div class="col s4 offset-s4">
+			<a href="{% url 'home' %}" class="btn">Go back to Home</a>
+		</div>
+	</div>
+
+	<br><br><br><br><br>
+</div>
+{% endblock %}
+
+<script type="text/javascript">
+{% block script %}
+	
+	$('.qformset').formset({
+        deleteText: '<button class="btn-floating red tooltipped" data-position="bottom" data-tooltip="Delete the question above"><i class="material-icons right">delete</i></button><br><br>',
+        addText: '<button class="btn-floating green tooltipped" data-position="bottom" data-tooltip="Add a new question"><i class="material-icons right">add</i></button>'
+    });
+
+{% endblock %}
+</script>

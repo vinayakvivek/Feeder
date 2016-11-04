@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+<style type="text/css">
+  {% block style %}
+  	{% include 'form_style.css' %}
+  {% endblock %}
+</style>
+
+{% block navbar %}	
+{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+	<div class="row">
+		<div class="card-panel row main-center">
+	
+			<div class="row center-align">
+			   	<p class="flow-text">Already logged in as <strong>{{ user }}</strong></p>
+			</div>
+			  
+			<div class="row col s6 center-align">
+			   	<a href="{% url 'logout' %}" class="btn waves-effect waves-light blue">Logout</a>
+			</div> 
+	
+			<div class="row col s6 center-align">
+			   	<a href="{% url 'home' %}" class="btn waves-effect waves-light blue">Home</a>
+			</div> 
+	
+		</div>
+	</div>
+
+
+{% elif not registered %}
+	<div class="">
+		<div id="login-page" class="row">
+			<div class="card-panel row main-center">
+
+				<div class="row center-align">
+	    			<p class="red-text">{{ user_form.non_field_errors }}<br>{{ error_msg }}</p>
+	    		</div>
+
+			    <form method="POST" action="{% url 'register' %}">
+			    {% csrf_token %}
+			    	<div class="row">
+			    		<div class="input-field col s6">
+			    			{{ user_form.first_name }}
+			    			{{ user_form.first_name.label_tag }}
+			    			<span class="red-text">{{ user_form.first_name.errors }}</span>
+			    		</div>
+			    		<div class="input-field col s6">
+			    			{{ user_form.last_name }}
+			    			{{ user_form.last_name.label_tag }}
+			    			<span class="red-text">{{ user_form.last_name.errors }}</span>
+			    		</div>
+			    	</div>
+			     
+
+				    <div class="row">
+				        <div class="input-field col s12">
+				          	{{ user_form.username }}
+				         	<label for="{{ user_form.username.id_for_label }}">Email</label>
+				         	<span class="red-text">{{ user_form.username.errors }}</span>
+				        </div>
+				    </div>
+
+				    <div class="row">
+				        <div class="input-field col s12">
+				        	{{ user_form.password }}
+				         	{{ user_form.password.label_tag }}
+				         	<span class="red-text">{{ user_form.password.errors }}<br>{{ error_passwd }}</span>
+				        </div>
+				    </div>
+
+				    <div class="row">
+				        <div class="input-field col s12">
+				        <input id="confirm_password" type="password" class="validate" name="confirm_password">
+			      	    <label for="confirm_password">Confirm Password</label>
+
+				        </div>
+				    </div>
+
+				    <div class="row">
+			            <div class="input-field col s12">
+			            	<input type="submit" name="submit" value="Sign Up" class="btn waves-effect waves-light col s12">
+			            </div>
+			        </div>
+			    </form>
+
+			    <div class="row center-align">
+			    	<p class="">Already have an account? <a href="{% url 'login' %}">Log in</a> here</p>
+			    </div>
+			   
+		    	<p class="row center-align">Or Sign in with <a href="{% url 'googlelogin' %}">google</a></p>
+
+			</div>
+		</div>
+	</div>
+
+{% elif registered %}
+
+	<div class="row">
+		<div class="card-panel row main-center">
+
+		    <div class="row center-align">
+		    	<p class="flow-text">Successfully registered.</p>
+		    </div>
+		  
+		    <div class="row center-align">
+		    	<a href="{% url 'login' %}" class="btn waves-effect waves-light blue">Login</a>
+		    </div> 
+
+		</div>
+	</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

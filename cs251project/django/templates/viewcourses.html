@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+<nav class="light-blue" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Courses</a>
+      <ul class="right">
+      	<li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+	
+	<div class="container">
+		<br><br>
+		<div class="collection valign">
+			{% for course in courses %}
+				<br>
+				<div class="collection-item row">
+					<div class="col s12 m6 l6">
+						<span class="flow-text">{{ course.name }} - {{ course.code }}</span>
+					</div>
+					<div class="col s6 m3 l3">
+						<a href="{% url 'course_detail' course.code %}">
+							<button class="btn-floating tooltipped green" data-position="bottom" data-delay="50" data-tooltip="Details about {{ course.code }}">
+								<i class="material-icons right">description</i>
+							</button>
+						</a>
+					</div>
+					<div class="col s6 m3 l3">
+						<form method="POST" action="{% url 'viewcourses' %}">
+							{% csrf_token %}
+							<input type="hidden" name="course_code" value="{{ course.code }}">
+							<button class="btn-floating tooltipped red" type="submit" data-position="bottom" data-delay="50" data-tooltip="Remove course {{ course.code }}">
+								<i class="material-icons right">delete</i>
+							</button>
+						</form>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+{% endblock %}
