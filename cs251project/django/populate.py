@@ -35,6 +35,16 @@ if (Instructor.objects.filter(email=spl_user.email).count() == 0):
 
 	spl_admin.save()
 
+non_spl_user = User.objects.get_or_create(username="instructor@feeder.com")[0]
+non_spl_user.first_name = "Instructor"
+non_spl_user.email="instructor@feeder.com"
+non_spl_user.set_password("instructor")
+non_spl_user.save()
+
+if (Instructor.objects.filter(email=non_spl_user.email).count() == 0):
+	inst = Instructor(email=non_spl_user.email, user=non_spl_user)
+	inst.save()
+
 
 
 
