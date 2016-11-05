@@ -73,9 +73,29 @@ public class DeadlineFragment extends Fragment {
 					if (pref.contains(Integer.toString(feedbackId) + "_" + pref.getString(LoginActivity.PREF_USER_KEY, null))) {
 						toast("You have already filled this feedback :)");
 					} else {
-						Intent intent = new Intent(getActivity(), FeedbackActivity.class);
-						intent.putExtra("id", feedbackId);
-						startActivity(intent);
+
+						long currTimeInMillis = System.currentTimeMillis();
+						Date currDate = new Date(currTimeInMillis);
+						Time currTime = new Time(currTimeInMillis);
+
+						boolean ok = false;
+						if (item.getSubmissionDate().compareTo(currDate) > 0) {
+							ok = true;
+						} else if (Utility.dateToString(item.getSubmissionDate()).equals(Utility.dateToString(currDate))) {
+
+							if (Utility.timeToString(item.getSubmissionTime()).compareTo(Utility.timeToString(currTime)) > 0) {
+								ok = true;
+							}
+						}
+
+						if (ok) {
+							Intent intent = new Intent(getActivity(), FeedbackActivity.class);
+							intent.putExtra("id", feedbackId);
+							startActivity(intent);
+						} else {
+							toast("Feedback deadline is over :(");
+						}
+
 					}
 				} else {
 					Intent intent = new Intent(getActivity(), DetailActivity.class);
