@@ -61,7 +61,7 @@ public class CalendarActivity extends AppCompatActivity {
 		colors.add(new ColorDrawable(Color.RED));
 		colors.add(new ColorDrawable(Color.CYAN));
 		colors.add(new ColorDrawable(Color.MAGENTA));
-		colors.add(new ColorDrawable(Color.parseColor("#0000FF")));
+		colors.add(new ColorDrawable(Color.GREEN));
 
 		noOfColors = colors.size();
 
