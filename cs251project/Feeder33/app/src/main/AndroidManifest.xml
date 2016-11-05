@@ -26,7 +26,7 @@
         <activity
             android:name=".CalendarActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.AppCompat.DayNight">
         </activity>
         <activity android:name=".DetailActivity">
         </activity>

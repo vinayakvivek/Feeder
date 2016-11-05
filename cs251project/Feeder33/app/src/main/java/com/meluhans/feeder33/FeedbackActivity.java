@@ -37,7 +37,6 @@ public class FeedbackActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_feedback);
 
 		Intent intent = getIntent();
 		feedbackId = intent.getIntExtra("id", 0);
@@ -68,6 +67,8 @@ public class FeedbackActivity extends AppCompatActivity {
 	}
 
 	public void initialise() {
+
+		setContentView(R.layout.activity_feedback);
 
 		title = (TextView) findViewById(R.id.feedbackTitle);
 		title.setText(feedback.title);

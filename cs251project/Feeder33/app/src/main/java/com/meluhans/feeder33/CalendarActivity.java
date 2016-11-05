@@ -1,5 +1,6 @@
 package com.meluhans.feeder33;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,6 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -59,6 +63,38 @@ public class CalendarActivity extends AppCompatActivity {
 		noOfColors = colors.size();
 
 		initialise();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_calendar, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.logOutOption:
+				Log.i("AppInfo", "clicked logOut");
+				logOut();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	public void logOut() {
+		SharedPreferences pref = getApplicationContext().getSharedPreferences(LoginActivity.PREF_NAME, MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+
+		editor.putString(LoginActivity.PREF_USER_KEY, "");
+		editor.putString(LoginActivity.PREF_ROLLNO_KEY, "");
+		editor.putBoolean(LoginActivity.PREF_AUTH_KEY, false);
+		editor.commit();
+
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
 	}
 
 	/**
