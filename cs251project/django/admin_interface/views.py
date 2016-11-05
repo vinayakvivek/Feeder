@@ -54,7 +54,6 @@ def student_login(request):
 			'error': error,
 		})
 
-
 @csrf_exempt
 def student_deadlines(request):
 	deadlines = []
@@ -84,18 +83,29 @@ def student_deadlines(request):
 			'deadlines': deadlines,
 		})
 
-
 @csrf_exempt
 def student_courses(request):
 	courses = []
+	error = ""
 	if request.method == 'POST':
-		objs = Course.objects.all()
-		for course in objs:
-			courses.append(course.code)
+		if 'rollno' in request.POST:
+			rollno = request.POST['rollno']
+			if Student.objects.filter(pk=rollno).count() > 0:
+				objs = Student.objects.get(pk=rollno).course_set.all()
+				for course in objs:
+					courses.append({
+							'code': course.code,
+							'name': course.name,
+						})
+			else:
+				error = "Student does not exists"
+		else:
+			error = "Invalid request"
+
 	return JsonResponse({
 			'courses': courses,
+			'error': error,
 		})
-
 
 @csrf_exempt
 def student_feedback(request):
@@ -150,6 +160,7 @@ def student_feedback_submit(request):
 	return JsonResponse({
 			'response': response, 
 		})
+
 
 
 def index(request):

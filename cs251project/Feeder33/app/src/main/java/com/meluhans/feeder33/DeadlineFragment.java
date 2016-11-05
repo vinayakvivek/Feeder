@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.sql.Time;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -103,6 +104,8 @@ public class DeadlineFragment extends Fragment {
 			JSONObject jsonObject = new JSONObject(response);
 			JSONArray deadlines = jsonObject.getJSONArray("deadlines");
 
+			Calendar today = Calendar.getInstance();
+
 			for (int i = 0; i < deadlines.length(); ++i) {
 
 				JSONObject d = deadlines.getJSONObject(i);
@@ -113,20 +116,24 @@ public class DeadlineFragment extends Fragment {
 				Time submissionTime = Utility.stringToTime(d.getString("submission_time"));
 				String id = d.getString("feedback_id");
 
-				int feedbackId = -1;
-				if (id.compareTo("null") != 0) {
-					feedbackId = Integer.parseInt(id);
-				}
+				if (submissionDate.compareTo(today.getTime()) > 0
+						|| Utility.dateToString(submissionDate).compareTo(Utility.dateToString(today.getTime())) == 0) {
+					
+					int feedbackId = -1;
+					if (id.compareTo("null") != 0) {
+						feedbackId = Integer.parseInt(id);
+					}
 
-				DeadlineItem item = new DeadlineItem(
-						courseCode,
-						assignment,
-						isFeedback,
-						submissionDate,
-						submissionTime,
-						feedbackId
-				);
-				deadlineList.add(item);
+					DeadlineItem item = new DeadlineItem(
+							courseCode,
+							assignment,
+							isFeedback,
+							submissionDate,
+							submissionTime,
+							feedbackId
+					);
+					deadlineList.add(item);
+				}
 			}
 
 		}
