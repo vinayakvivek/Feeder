@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 # model for instructor
@@ -47,7 +48,7 @@ class Question(models.Model):
 	e = models.CharField(max_length=100)
 	
 	def __str__(self):
-		return self.question
+		return self.id
 
 	def clean(self):
 		from django.core.exceptions import ValidationError
@@ -77,6 +78,11 @@ class Deadline(models.Model):
 
 	def __str__(self):
 		return self.assignment
+
+	def is_past_due(self):
+		if date.today() > self.submission_date:
+			return True
+		return False
 
 
 class Feedback(models.Model):

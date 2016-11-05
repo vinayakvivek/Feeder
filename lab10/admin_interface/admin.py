@@ -13,10 +13,13 @@ class CourseAdmin(admin.ModelAdmin):
 class DeadlineAdmin(admin.ModelAdmin):
 	list_display = ['assignment', 'course', 'submission_date', 'submission_time']
 
+class QuestionAdmin(admin.ModelAdmin):
+	list_display = ['question', 'id']
+
 admin.site.register(Instructor, InstructorAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Feedback)
-admin.site.register(Question)
+admin.site.register(Question, QuestionAdmin)
 admin.site.register(Objectiveanswer)
 admin.site.register(Deadline, DeadlineAdmin)

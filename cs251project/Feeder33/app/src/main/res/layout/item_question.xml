@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_feedback"
+    android:layout_width="match_parent"
+    android:layout_height="270dp"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.meluhans.feeder33.FeedbackActivity">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:textSize="20sp"
+        android:id="@+id/questionText"
+        android:textColor="@color/caldroid_black"/>
+
+    <RadioGroup
+        android:layout_width="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:id="@+id/options">
+        <RadioButton android:id="@+id/option1"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/caldroid_black"
+                     android:text="Option1"
+                     android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/option2"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/caldroid_black"
+                     android:text="Option2"
+                     android:onClick="onRadioButtonClicked"/>
+        <RadioButton android:id="@+id/option3"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/caldroid_black"
+                     android:onClick="onRadioButtonClicked"
+                     android:text="Option3"/>
+        <RadioButton android:id="@+id/option4"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/caldroid_black"
+                     android:onClick="onRadioButtonClicked"
+                     android:text="Option4"/>
+        <RadioButton android:id="@+id/option5"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textColor="@color/caldroid_black"
+                     android:onClick="onRadioButtonClicked"
+                     android:text="Option5"/>
+    </RadioGroup>
+
+
+</RelativeLayout>

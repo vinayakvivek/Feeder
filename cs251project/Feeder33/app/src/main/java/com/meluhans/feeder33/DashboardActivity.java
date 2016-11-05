@@ -13,6 +13,7 @@ public class DashboardActivity extends AppCompatActivity {
 	private static String rollNumber;
 
 	Button logOutButton;
+	Button calendarButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,19 @@ public class DashboardActivity extends AppCompatActivity {
 				logOut();
 			}
 		});
+
+		calendarButton = (Button) findViewById(R.id.calendarButton);
+		calendarButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				goToCalender();
+			}
+		});
+	}
+
+	public void goToCalender() {
+		Intent intent = new Intent(this, CalendarActivity.class);
+		startActivity(intent);
 	}
 
 	public void getName() {

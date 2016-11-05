@@ -54,48 +54,70 @@ def student_login(request):
 			'error': error,
 		})
 
-
 @csrf_exempt
 def student_deadlines(request):
 	deadlines = []
+	error = ""
 	if request.method == 'POST':
 
-		objs = Deadline.objects.all()
+		if 'rollno' in request.POST:
+			rollno = request.POST['rollno']
+			dateExists = False
 
-		if 'date' in request.POST:
-			date = request.POST['date']
-			objs = Deadline.objects.filter(submission_date=date)
-		
-		for obj in objs:
-			deadline = {
-				'course': obj.course.code,
-				'assignment': obj.assignment,
-				'is_feedback': obj.is_feedback,
-				'submission_date': obj.submission_date,
-				'submission_time': obj.submission_time,
-				'feedback_id': None,
-			}
-			if hasattr(obj, 'feedback'):
-				deadline['feedback_id'] = obj.feedback.id
+			if 'date' in request.POST:
+				date = request.POST['date']
+				dateExists = True
 
-			deadlines.append(deadline)
+			courses = Student.objects.get(pk=rollno).course_set.all()
 
+			for course in courses:
+				if dateExists:
+					objs = course.deadline_set.filter(submission_date=date)
+				else:
+					objs = course.deadline_set.all()
+
+				for obj in objs:
+					deadline = {
+						'course': obj.course.code,
+						'assignment': obj.assignment,
+						'is_feedback': obj.is_feedback,
+						'submission_date': obj.submission_date,
+						'submission_time': obj.submission_time,
+						'feedback_id': None,
+					}
+					if hasattr(obj, 'feedback'):
+						deadline['feedback_id'] = obj.feedback.id
+
+					deadlines.append(deadline)
+		else:
+			error = "Invalid request"
 	return JsonResponse({
 			'deadlines': deadlines,
 		})
 
-
 @csrf_exempt
 def student_courses(request):
 	courses = []
+	error = ""
 	if request.method == 'POST':
-		objs = Course.objects.all()
-		for course in objs:
-			courses.append(course.code)
+		if 'rollno' in request.POST:
+			rollno = request.POST['rollno']
+			if Student.objects.filter(pk=rollno).count() > 0:
+				objs = Student.objects.get(pk=rollno).course_set.all()
+				for course in objs:
+					courses.append({
+							'code': course.code,
+							'name': course.name,
+						})
+			else:
+				error = "Student does not exists"
+		else:
+			error = "Invalid request"
+
 	return JsonResponse({
 			'courses': courses,
+			'error': error,
 		})
-
 
 @csrf_exempt
 def student_feedback(request):
@@ -148,8 +170,9 @@ def student_feedback_submit(request):
 		else:
 			response = "Answer not marked for question " + str(question_id)
 	return JsonResponse({
-			'response' : response,
+			'response': response, 
 		})
+
 
 
 def index(request):
@@ -315,9 +338,13 @@ def home(request):
 		if Instructor.objects.filter(user=request.user).count() > 0:
 			instrctor = Instructor.objects.get(user=request.user)
 			is_special = instrctor.special_admin
-
+			if instrctor.user.first_name == '':
+				name = instrctor.email
+			else:
+				name = instrctor.user.first_name + " " + instrctor.user.last_name
 			context = {
 				'is_special': is_special,
+				'name': name,
 			}
 
 			return render(request, 'home.html', context)
@@ -750,9 +777,21 @@ def viewdeadlines(request):
 
 	if request.user.is_authenticated:
 
+		running_deadlines = []
+		past_deadlines = []
+
 		deadlines = Deadline.objects.all().order_by('submission_date', 'submission_time')
+
+		for deadline in deadlines:
+			if deadline.is_past_due():
+				past_deadlines.append(deadline)
+			else:
+				running_deadlines.append(deadline)
+
 		context = {
 			'deadlines': deadlines,
+			'past_deadlines': past_deadlines,
+			'running_deadlines': running_deadlines,
 		}
 		return render(request, 'viewdeadlines.html', context)
 

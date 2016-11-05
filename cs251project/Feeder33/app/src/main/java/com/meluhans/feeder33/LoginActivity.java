@@ -34,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
 	public static final String PREF_ROLLNO_KEY = "rollno";
 	public static final String PREF_AUTH_KEY = "authenticated";
 
+	public static final String BASE_URL = "http://10.0.2.2:8033/student/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,8 @@ public class LoginActivity extends AppCompatActivity {
 
 		if (authenticated) {
 			toast("Logged in as " + pref.getString(PREF_USER_KEY, ""));
-			goToDashboard();
+			// goToDashboard();
+			goToCalendar();
 		}
 	}
 
@@ -72,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 	// if valid is true, then credentials are valid and redirects to dashboard
 	public void logIn(final String rollNumber, final String password) {
 
-		String url = "http://10.0.2.2:8033/student/login/";
+		String url = BASE_URL + "login/";
 		RequestQueue queue = Volley.newRequestQueue(this);
 		StringRequest postRequest = new StringRequest(Request.Method.POST, url,
 				new Response.Listener<String>() {
@@ -86,7 +89,8 @@ public class LoginActivity extends AppCompatActivity {
 							if (valid.compareTo("true") == 0) {
 								toast("Welcome " + name);
 								saveInPref(rollNumber, name);
-								goToDashboard();
+								// goToDashboard();
+								goToCalendar();
 							} else {
 								toast(jsonObject.getString("error"));
 							}
@@ -121,6 +125,12 @@ public class LoginActivity extends AppCompatActivity {
 	// redirects to DashboardActivity
 	public void goToDashboard() {
 		Intent intent = new Intent(this, DashboardActivity.class);
+		startActivity(intent);
+	}
+
+	// redirects to CalendarActivity
+	public void goToCalendar() {
+		Intent intent = new Intent(this, CalendarActivity.class);
 		startActivity(intent);
 	}
 
