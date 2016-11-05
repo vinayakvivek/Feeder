@@ -123,7 +123,7 @@ public class FeedbackActivity extends AppCompatActivity {
 					}
 
 					saveInPrefs(feedback.id);
-
+					toast("Feedback submitted successfully :)");
 					Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
 					startActivity(intent);
 				} else {
