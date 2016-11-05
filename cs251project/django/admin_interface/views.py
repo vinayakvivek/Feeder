@@ -315,9 +315,13 @@ def home(request):
 		if Instructor.objects.filter(user=request.user).count() > 0:
 			instrctor = Instructor.objects.get(user=request.user)
 			is_special = instrctor.special_admin
-
+			if instrctor.user.first_name == '':
+				name = instrctor.email
+			else:
+				name = instrctor.user.first_name + " " + instrctor.user.last_name
 			context = {
 				'is_special': is_special,
+				'name': name,
 			}
 
 			return render(request, 'home.html', context)
