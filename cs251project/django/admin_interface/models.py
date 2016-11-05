@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 # model for instructor
@@ -77,6 +78,11 @@ class Deadline(models.Model):
 
 	def __str__(self):
 		return self.assignment
+
+	def is_past_due(self):
+		if date.today() > self.submission_date:
+			return True
+		return False
 
 
 class Feedback(models.Model):

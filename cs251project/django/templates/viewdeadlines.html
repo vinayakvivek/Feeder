@@ -24,6 +24,9 @@
 {% block content %}
 	<br><br>
 	<div class="container">
+		<div class="row">
+			<p class="flow-text red-text">Running deadlines</p>
+		</div>
 		<table class="highlight">
 	        <thead>
 		        <tr>
@@ -35,16 +38,46 @@
 	        </thead>
 
 	        <tbody>
-	        	{% for deadline in deadlines %}
+	        	{% for deadline in running_deadlines %}
 	            <tr>
 		            <td>{{ deadline.course }}</td>
 		            <td>{{ deadline.assignment }}</td>
 		            <td>{{ deadline.submission_date }}</td>
 		            <td>{{ deadline.submission_time }}</td>
-
 	            </tr>
 	            {% endfor %}
 	        </tbody>
 	    </table>
+	</div>
+
+	<br><br>
+	<div class="container">
+		<div class="row">
+			<p class="flow-text green-text">Past deadlines</p>
+		</div>
+		<table class="highlight">
+	        <thead>
+		        <tr>
+		            <th>Course</th>
+		            <th>Assignment</th>
+		            <th>Submission Date</th>
+		            <th>Submission Time</th>
+		        </tr>
+	        </thead>
+
+	        <tbody>
+	        	{% for deadline in past_deadlines %}
+	            <tr>
+		            <td>{{ deadline.course }}</td>
+		            <td>{{ deadline.assignment }}</td>
+		            <td>{{ deadline.submission_date }}</td>
+		            <td>{{ deadline.submission_time }}</td>
+	            </tr>
+	            {% endfor %}
+	        </tbody>
+	    </table>
+	</div>
+
+	<br><br><br><br>
 
 {% endblock %}

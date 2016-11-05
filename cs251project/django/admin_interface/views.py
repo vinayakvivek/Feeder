@@ -750,9 +750,21 @@ def viewdeadlines(request):
 
 	if request.user.is_authenticated:
 
+		running_deadlines = []
+		past_deadlines = []
+
 		deadlines = Deadline.objects.all().order_by('submission_date', 'submission_time')
+
+		for deadline in deadlines:
+			if deadline.is_past_due():
+				past_deadlines.append(deadline)
+			else:
+				running_deadlines.append(deadline)
+
 		context = {
 			'deadlines': deadlines,
+			'past_deadlines': past_deadlines,
+			'running_deadlines': running_deadlines,
 		}
 		return render(request, 'viewdeadlines.html', context)
 
