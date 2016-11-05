@@ -8,36 +8,53 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.meluhans.feeder33.LoginActivity">
+    tools:context="com.meluhans.feeder33.LoginActivity"
+    android:background="@drawable/bg">
 
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
-        android:id="@+id/rollno"
-        android:hint="@string/rollno" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="40sp"
+            android:layout_marginBottom="50dp"
+            android:textColor="@color/caldroid_white"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_below="@+id/rollno"
-        android:layout_alignLeft="@+id/rollno"
-        android:layout_alignStart="@+id/rollno"
-        android:layout_marginTop="48dp"
-        android:id="@+id/password"
-        android:hint="@string/password" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/rollno"
+            android:padding="10dp"
+            style="@style/CustomEditTextStyle"
+            android:background="@drawable/edit_text_shape"
+            android:hint="@string/rollno" />
 
-    <Button
-        android:text="@string/logInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/logInButton" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:layout_marginTop="48dp"
+            style="@style/CustomEditTextStyle"
+            android:padding="10dp"
+            android:id="@+id/password"
+            android:background="@drawable/edit_text_shape"
+            android:hint="@string/password" />
+
+        <Button
+            android:text="@string/logInButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:background="@drawable/button_shape"
+            android:id="@+id/logInButton" />
+    </LinearLayout>
 </RelativeLayout>

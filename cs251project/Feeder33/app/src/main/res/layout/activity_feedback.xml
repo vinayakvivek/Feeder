@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.meluhans.feeder33.FeedbackActivity"
-    android:background="@android:color/darker_gray">
+    android:background="@drawable/bg">
 
 
         <LinearLayout
@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
                 android:textSize="30sp"
+                android:textColor="@color/caldroid_white"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/courseText"/>
 
@@ -32,10 +33,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textSize="30sp"
-                android:textColor="@color/caldroid_holo_blue_dark"
+                android:textSize="25sp"
+                android:textColor="@color/caldroid_white"
                 android:padding="10dp"
-                android:background="@drawable/red_border_gray_bg"
+                android:background="@drawable/text_shape"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/feedbackTitle"/>
 
@@ -52,6 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
                 android:layout_gravity="center_horizontal"
+                android:textColor="@color/caldroid_white"
+                android:background="@drawable/button_shape"
                 android:id="@+id/submitButton"/>
 
         </LinearLayout>

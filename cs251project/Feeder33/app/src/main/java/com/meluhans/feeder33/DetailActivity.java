@@ -29,10 +29,10 @@ public class DetailActivity extends AppCompatActivity {
 
 		courseName.setText(course);
 		title.setText(assignment);
-		dateLabel.setText("Submission Date : ");
+		dateLabel.setText("Submission Date");
 		dateText.setText(date);
 
-		timeLabel.setText("Submission Time : ");
+		timeLabel.setText("Submission Time");
 		timeText.setText(time);
 	}
 }
