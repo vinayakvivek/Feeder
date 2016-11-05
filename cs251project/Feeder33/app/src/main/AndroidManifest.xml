@@ -39,7 +39,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
-        <activity android:name=".CourseActivity">
+        <activity
+            android:name=".CourseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light">
         </activity>
     </application>
 

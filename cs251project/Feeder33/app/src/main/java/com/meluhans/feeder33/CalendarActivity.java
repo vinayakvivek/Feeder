@@ -37,6 +37,8 @@ import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
 
+	String rollno;
+
 	List<Drawable> colors = new ArrayList<>();
 	List<String> courses = new ArrayList<>();
 	Map<Date, Drawable> dateColorMap = new HashMap<>();
@@ -59,10 +61,23 @@ public class CalendarActivity extends AppCompatActivity {
 		colors.add(new ColorDrawable(Color.RED));
 		colors.add(new ColorDrawable(Color.CYAN));
 		colors.add(new ColorDrawable(Color.MAGENTA));
+		colors.add(new ColorDrawable(Color.parseColor("#0000FF")));
 
 		noOfColors = colors.size();
 
+		getRollNo();
 		initialise();
+	}
+
+	public void getRollNo() {
+		SharedPreferences pref = getApplicationContext().getSharedPreferences(LoginActivity.PREF_NAME, MODE_PRIVATE);
+		if (pref.contains(LoginActivity.PREF_ROLLNO_KEY)) {
+			rollno = pref.getString(LoginActivity.PREF_ROLLNO_KEY, null);
+		} else {
+			toast("Roll number does not exists");
+			Intent intent = new Intent(this, CalendarActivity.class);
+			startActivity(intent);
+		}
 	}
 
 	@Override
@@ -79,9 +94,16 @@ public class CalendarActivity extends AppCompatActivity {
 				Log.i("AppInfo", "clicked logOut");
 				logOut();
 				return true;
+			case R.id.coursesOption:
+				goToCourses();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	public void goToCourses() {
+		Intent intent = new Intent(this, CourseActivity.class);
+		startActivity(intent);
 	}
 
 	public void logOut() {
@@ -150,6 +172,7 @@ public class CalendarActivity extends AppCompatActivity {
 			@Override
 			protected Map<String, String> getParams() {
 				Map<String, String>  params = new HashMap<String, String>();
+				params.put("rollno", rollno);
 				return params;
 			}
 		};

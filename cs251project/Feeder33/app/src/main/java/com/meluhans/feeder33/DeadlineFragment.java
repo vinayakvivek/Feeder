@@ -118,7 +118,7 @@ public class DeadlineFragment extends Fragment {
 
 				if (submissionDate.compareTo(today.getTime()) > 0
 						|| Utility.dateToString(submissionDate).compareTo(Utility.dateToString(today.getTime())) == 0) {
-					
+
 					int feedbackId = -1;
 					if (id.compareTo("null") != 0) {
 						feedbackId = Integer.parseInt(id);
