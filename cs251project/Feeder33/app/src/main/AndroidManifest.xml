@@ -28,9 +28,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight">
         </activity>
-        <activity android:name=".DetailActivity">
+        <activity
+            android:name=".DetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
-        <activity android:name=".FeedbackActivity">
+        <activity
+            android:name=".FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
         </activity>
     </application>
 

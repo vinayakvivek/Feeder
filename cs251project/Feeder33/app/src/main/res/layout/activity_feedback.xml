@@ -9,7 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.meluhans.feeder33.FeedbackActivity">
+    tools:context="com.meluhans.feeder33.FeedbackActivity"
+    android:background="@android:color/darker_gray">
 
 
         <LinearLayout
@@ -21,22 +22,36 @@
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="11dp"
                 android:textSize="30sp"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/courseText"/>
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="30sp"
+                android:textColor="@color/caldroid_holo_blue_dark"
+                android:padding="10dp"
+                android:background="@drawable/red_border_gray_bg"
+                android:layout_gravity="center_horizontal"
                 android:id="@+id/feedbackTitle"/>
 
             <ListView
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="400dp"
+                android:layout_marginTop="10dp"
                 android:id="@+id/questionListView"
-                android:background="@android:color/holo_orange_light"/>
+                android:background="@android:color/background_light"/>
 
             <Button
                 android:text="Submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
+                android:layout_gravity="center_horizontal"
                 android:id="@+id/submitButton"/>
 
         </LinearLayout>

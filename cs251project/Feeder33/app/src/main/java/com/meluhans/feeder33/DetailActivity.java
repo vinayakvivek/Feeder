@@ -20,12 +20,14 @@ public class DetailActivity extends AppCompatActivity {
 
 		setTitle(course);
 
+		TextView courseName = (TextView) findViewById(R.id.courseText);
 		TextView title = (TextView) findViewById(R.id.titleText);
 		TextView dateLabel = (TextView) findViewById(R.id.dateLabel);
 		TextView dateText = (TextView) findViewById(R.id.date);
 		TextView timeLabel = (TextView) findViewById(R.id.timeLabel);
 		TextView timeText = (TextView) findViewById(R.id.time);
 
+		courseName.setText(course);
 		title.setText(assignment);
 		dateLabel.setText("Submission Date : ");
 		dateText.setText(date);

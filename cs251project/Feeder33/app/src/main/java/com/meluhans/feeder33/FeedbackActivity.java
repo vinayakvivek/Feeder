@@ -31,6 +31,7 @@ public class FeedbackActivity extends AppCompatActivity {
 	ListView questionListView;
 	QuestionListAdapter adapter;
 	TextView title;
+	TextView course;
 	Button submitButton;
 	int feedbackId;
 
@@ -72,6 +73,9 @@ public class FeedbackActivity extends AppCompatActivity {
 
 		title = (TextView) findViewById(R.id.feedbackTitle);
 		title.setText(feedback.title);
+
+		course = (TextView) findViewById(R.id.courseText);
+		course.setText(feedback.course);
 
 		submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new View.OnClickListener() {
